@@ -7,6 +7,8 @@
 
 author: Qu1nel
 data: 24_12_2022
+
+Python3.10+
 """
 
 __author__ = 'Qu1nel'
@@ -20,19 +22,51 @@ from dataclasses import dataclass
 
 @dataclass
 class ContactAddress:
-    pass
+    name: str
+    surname: str
+    number_phone: str
+    email: str
 
 
 class ContactNotExists(Exception):
-    pass
+    def __init__(self, contact: ContactAddress):
+        self.contact = contact
+
+    def __str__(self):
+        return f'Контакт {self.contact} не существует в телефонной книге!'
 
 
 class Book(dict):
-    pass
+    """
+
+    """
+    __idx: int = 0
+
+    def add_contact(self, contact: ContactAddress) -> None:
+        pass
+
+    def remove_contact(self, contact: ContactAddress) -> None:
+        pass
+
+    def edit_contact(self, contact: ContactAddress) -> None:
+        pass
+
+    def show_book(self) -> None:
+        pass
+
+    def search_contact(self) -> None:
+        pass
+
+    def _is_exists(self, contact: ContactAddress) -> bool:
+        pass
 
 
 class MainCommandHandler:
-    pass
+    def __init__(self, address_book: Book):
+        self.core_address_book = address_book
+
+    def run(self) -> None:
+        pass
 
 
 def main() -> None:
