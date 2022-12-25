@@ -177,7 +177,11 @@ def main() -> None:
     main_book = Book()
 
     program = MainCommandHandler(address_book=main_book)
-    program.run()
+    try:
+        program.run()
+    except KeyboardInterrupt:
+        os.system("cls||clear")  # Очистка консоли где бы не был пользователь - так лучше.
+        print("\nВы вышли из приложения. Удачного времени суток, пока!\n")
 
 
 if __name__ == '__main__':
