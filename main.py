@@ -37,35 +37,88 @@ class ContactNotExists(Exception):
 
 
 class Book(dict):
+    """Телефонная книга (словарь) для адресов людей.
+
+    __idx - Указатель на следующее место в книге
+
+    :methods:
+        add_contact(contact: ContactAddress) - Добавляет экземпляр ContactAddress в книгу.
+        remove_contact(contact: ContactAddress) - Удаляет экземпляр ContactAddress из книги.
+        edit_contact() - Позволяет редактировать ContactAddress в книге.
+        show_board() - Показывает пользователю телефонную книгу постранично.
+        search_contact() - Ищет контакт в книге по 4 основным полям.
+        _is_exists(contact: ContactAddress) - Предикат. Проверяет существует ли ContactAddress в книге.
     """
 
-    """
     __idx: int = 0
 
     def add_contact(self, contact: ContactAddress) -> None:
-        pass
+        """Добавляет contact в телефонную книгу.
+
+        :param contact: Экземпляр класс ContactAddress
+        :raise TypeError: Если contact не является экземпляром класс ContactAddress
+        :return: None
+        """
 
     def remove_contact(self, contact: ContactAddress) -> None:
+        """Удаляет contact из телефонной книги.
+
+        :param contact: Экземпляр класс ContactAddress
+        :raise TypeError: Если contact не является экземпляром класс ContactAddress
+        :raise ContactNotExists: Если contact не найден в телефонной книге
+        :return: None
+        """
         pass
 
     def edit_contact(self, contact: ContactAddress) -> None:
         pass
 
     def show_book(self) -> None:
+        """Рисует телефонную книгу в консоли. В 3 этапа. Заголовок, тело и низ.
+
+        :return: None
+        """
         pass
 
     def search_contact(self) -> None:
         pass
 
     def _is_exists(self, contact: ContactAddress) -> bool:
+        """ Предикат. Возвращает True если contact существует в книге, False иначе.
+
+        :param contact: Экземпляр класс ContactAddress
+        :return: bool[True, False]
+        """
         pass
 
 
 class MainCommandHandler:
+    """Класс-обработчик пользовательских команд телефонной книги в консоли.
+
+    :methods:
+        run() - Запуск приложения, с дальнейшим развитием действий.
+    """
+
     def __init__(self, address_book: Book):
         self.core_address_book = address_book
 
     def run(self) -> None:
+        """Запускает приложение. Отлавливает начальные команды пользователя.
+
+        1 | add - добавить контакт.
+
+        2 | show - показать телефонную книгу.
+
+        3 | remove - удалить контакт из книги.
+
+        4 | edit - редактировать контакт в книге.
+
+        5 | search - найти контакт в книге.
+
+        0 | exit - выйти из приложения.
+
+        :return: None
+        """
         pass
 
 
