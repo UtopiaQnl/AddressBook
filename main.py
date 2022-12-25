@@ -1,3 +1,4 @@
+#!/c/pythons/Python310/python.exe
 """
 Таск из "Byte of Python"
 
@@ -153,7 +154,10 @@ class MainCommandHandler:
 
 
 def main() -> None:
-    pass
+    main_book = Book()
+
+    program = MainCommandHandler(address_book=main_book)
+    program.run()
 
 
 if __name__ == '__main__':
