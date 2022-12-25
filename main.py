@@ -119,7 +119,37 @@ class MainCommandHandler:
 
         :return: None
         """
-        pass
+        while True:
+            os.system("cls||clear")  # Перед работой приложения, нужно очистить консоль - так лучше
+
+            # TODO вывести всю информацию для пользования + лого
+
+            user_answer: str = input('$_> ')  # корректный ввод: 0..5, add, remove, show, search, edit, exit
+
+            match user_answer:
+                # Добавить контакт в телефонную книгу
+                case '1' | 'add' | 'a':
+                    pass
+
+                # Показать телефонную книгу пользователю
+                case '3' | 'show' | 'sh' | 's':
+                    pass
+
+                # Удалить контакт из телефонной книги
+                case '3' | 'remove' | 'rem' | 'rm' | 'r':
+                    pass
+
+                # Редактировать контакт в телефонной книге
+                case '4' | 'edit' | 'ed':
+                    pass
+
+                # Показать телефонную книгу пользователю
+                case '5' | 'search' | 'sr':
+                    pass
+
+                # Выйти из приложения
+                case '0' | 'exit' | 'ex' | 'e':
+                    pass
 
 
 def main() -> None:
