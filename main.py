@@ -193,9 +193,7 @@ class MainCommandHandler:
             match user_answer:
                 # Добавить контакт в телефонную книгу
                 case '1' | 'add' | 'a':
-                    # TODO добавить "добавление" контакта в книгу. Отдельное окно.
-                    os.system("cls||clear")  # TEMP
-                    print("...добавление контакта (1)")
+                    self.interface_adding_contact()
 
                 # Показать телефонную книгу пользователю
                 case '2' | 'show' | 'sh' | 's':
@@ -225,6 +223,22 @@ class MainCommandHandler:
 
                 case _:
                     os.system("cls||clear")
+
+    def interface_adding_contact(self) -> None:
+        """Обертка для Book.add_contact. Позволяет добавлять контакты в книгу.
+
+        :return: None
+        """
+        os.system("cls||clear")  # Чистая консоль - жизнь без проблем
+
+        # TODO Сделать запрос 4-ёх полей: name, surname, number_phone, email
+        # TODO Подтвердить введённый данные. Далее создать контакт или ввести по новой
+
+        # TODO Реализовать метод Book.add_contact()
+
+        # TODO Сохраняем контакт с time.sleep(1). и print(end='\r')
+
+        os.system("cls||clear")  # Грязь в главном меню - неуважение родственников
 
     def board_display_interface(self) -> None:
         """Обертка для Book.show_book. Позволяет перелистывать книгу.
