@@ -20,6 +20,13 @@ import pickle
 
 from dataclasses import dataclass
 
+MAX_WIDTH_NAME = 20  # максимальная ширина для имени
+MAX_WIDTH_SURNAME = 20  # максимальная ширина для фамилии
+MAX_WIDTH_NUMBER_PHONE = 20  # максимальная ширина для номера телефона
+MAX_WIDTH_EMAIL = 30  # максимальная ширина для электронной почты
+MAX_WIDTH_ID = 5  # максимальная длина для id контакта
+COUNT_CONTACTS_VIEW = 15  # кол-во показываемых контактов
+
 
 @dataclass
 class ContactAddress:
@@ -41,6 +48,7 @@ class Book(dict):
     """Телефонная книга (словарь) для адресов людей.
 
     __idx - Указатель на следующее место в книге
+    showing_page - Индекс страницы (для корректного вырисовывания книги в консоль)
 
     :methods:
         add_contact(contact: ContactAddress) - Добавляет экземпляр ContactAddress в книгу.
@@ -52,6 +60,7 @@ class Book(dict):
     """
 
     __idx: int = 0
+    showing_page: int = 1
 
     def add_contact(self, contact: ContactAddress) -> None:
         """Добавляет contact в телефонную книгу.
@@ -79,7 +88,62 @@ class Book(dict):
 
         :return: None
         """
-        pass
+
+        # Максимальная ширина таблицы (да-да, зависит от констант...можно и реальные размеры консоли взять)
+        main_width_line = (6 + MAX_WIDTH_SURNAME + MAX_WIDTH_NUMBER_PHONE +
+                           MAX_WIDTH_EMAIL + MAX_WIDTH_ID + MAX_WIDTH_NAME)
+        main_line = '-' * main_width_line  # В отдельной переменной, чтобы по много раз не высчитывать строку
+
+        header = {
+            '№': MAX_WIDTH_ID,
+            'Имя': MAX_WIDTH_NAME,
+            'Фамилия': MAX_WIDTH_SURNAME,
+            'Телефон': MAX_WIDTH_NUMBER_PHONE,
+            'Почта': MAX_WIDTH_EMAIL
+        }
+
+        def _draw_header() -> None:
+            """Рисует шапку таблицы (заголовки)."""
+            print(main_line)
+            for title, width in header.items():
+                print('|' + title.center(width), end='')
+            print('|')
+            print(main_line)
+
+        def _draw_body() -> None:
+            """Рисует тело таблицы, т.е. все контакты."""
+
+            # Диапазон вырисовываемых контактов
+            finish_range = COUNT_CONTACTS_VIEW * self.showing_page
+            start_range = finish_range - COUNT_CONTACTS_VIEW
+
+            for idx in range(start_range, finish_range):
+                block_id = '|' + str(idx + 1).center(header['№'])
+                print(block_id, end='')
+
+                if self.get(idx) is None:  # Если контакта нет
+                    print('|' + '...'.center(header['Имя']) +
+                          '|' + '...'.center(header['Фамилия']) +
+                          '|' + '...'.center(header['Телефон']) +
+                          '|' + '...'.center(header['Почта']) + '|')
+                else:
+                    block_name = '|' + self[idx].name.center(header['Имя'])
+                    block_surname = '|' + self[idx].surname.center(header['Фамилия'])
+                    block_phone = '|' + self[idx].number_phone.center(header['Телефон'])
+                    block_email = '|' + self[idx].email.center(header['Почта'])
+
+                    print(block_name + block_surname + block_phone + block_email, end='|\n')
+
+        def _draw_floor() -> None:
+            """Рисует низ таблицы контактов. + Показывает на какой страницы сейчас."""
+            print(main_line)
+            info = f' Страница {self.showing_page}'
+            print(f'|{info}' + ' ' * (main_width_line - len(info) - 2), end='|\n')
+            print(main_line)
+
+        _draw_header()
+        _draw_body()
+        _draw_floor()
 
     def search_contact(self) -> None:
         pass
@@ -135,9 +199,7 @@ class MainCommandHandler:
 
                 # Показать телефонную книгу пользователю
                 case '2' | 'show' | 'sh' | 's':
-                    # TODO отрисовать в отдельном окне таблицу контактов пользователю.
-                    os.system("cls||clear")  # TEMP
-                    print("...отрисовка контактов (2)")
+                    self.board_display_interface()
 
                 # Удалить контакт из телефонной книги
                 case '3' | 'remove' | 'rem' | 'rm' | 'r':
@@ -163,6 +225,35 @@ class MainCommandHandler:
 
                 case _:
                     os.system("cls||clear")
+
+    def board_display_interface(self) -> None:
+        """Обертка для Book.show_book. Позволяет перелистывать книгу.
+
+        :return: None
+        """
+        while True:
+            os.system("cls||clear")  # Очистить консоль - дело святое
+
+            self.core_address_book.show_book()  # Основная функция отрисовки таблицы*
+
+            print("1 - Следующая страница.\t(n)ext\n2 - Предыдущая страница.\t(p)revius\n0 - Выход (e)xit\n")
+            answer = input("$_> ")
+            match answer:
+                # Следующая страница
+                case '1' | 'next' | 'n':
+                    self.core_address_book.showing_page += 1
+
+                # Предыдущая страница
+                case '2' | 'prev' | 'pr' | 'p':
+                    if (diff := self.core_address_book.showing_page - 1) < 1:  # чтобы не уйти в отрицательные числа
+                        self.core_address_book.showing_page = 1
+                    else:
+                        self.core_address_book.showing_page = diff
+
+                # Выход в главное меню
+                case '0' | 'exit' | 'e':
+                    os.system("cls||clear")  # Нужно очистить, т.к. в главном меню - главное меню, а не таблица
+                    break
 
     @staticmethod
     def welcome() -> None:
