@@ -48,7 +48,22 @@ class ContactAddress:
 
     def change_name(self) -> None:
         """Отдельное окно. Позволяет изменить имя (name)."""
-        pass
+        while True:
+            clear_console()
+            print("\nВведите новое имя")
+            new_name = input("$_> ").capitalize()
+
+            if not new_name:
+                print("Вы ввели пустое имя. Изменения не засчитаны...")
+                sleep(1)
+                break
+            elif len(new_name) >= MAX_WIDTH_NAME:
+                print("Вы ввели слишком длинное имя. Изменения не засчитаны...")
+                sleep(1)
+                break
+
+            self.name = new_name
+            break
 
     def change_surname(self) -> None:
         """Отдельное окно. Позволяет изменить фамилию (surname)."""
@@ -126,12 +141,12 @@ class Book(dict):
 
             contact.pprint_info()
 
-            print("Что вы можете сделать:\n")
+            print("\nЧто вы можете сделать:\n")
 
             print("1 - Изменить Имя. (N)ame\n2 - Изменить Фамилию. (S)urname")
             print("3 - Изменить Номер телефона. (P)hone\n4 - Изменить почту. (E)mail\n0 - Выход. (e)xit\n")
 
-            user_answer = input("$_> ").lower
+            user_answer = input("$_> ").lower()
             match user_answer:
                 case '1' | 'имя' | 'name' | 'N' | 'n':
                     contact.change_name()
