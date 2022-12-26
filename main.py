@@ -193,14 +193,40 @@ class Book(dict):
         :raise ContactNotExists: Если contact не найден в телефонной книге
         :return: None
         """
+
+        def _get_agree_from_user(candidate: ContactAddress) -> bool:
+            """Получает подтверждение на удаление контакта из книги от пользователя.
+
+            :return: bool
+            """
+            while True:
+                clear_console()
+                print("\nВы уверены что хотите удалить этот контакт?")
+                candidate.pprint_info()
+
+                print("\n1 - Да.  (y)es")
+                print("2 - Нет. (n)o")
+                print("0 - Выход. (e)xit\n")
+
+                user_answer = input("$_> ").lower()
+                match user_answer:
+                    case '1' | 'да' | 'yes' | 'y':
+                        clear_console()
+                        return True
+                    case '2' | 'нет' | 'no' | 'n' | '0' | 'exit' | 'e':
+                        clear_console()
+                        return False
+
         if not isinstance(contact, ContactAddress):
             raise TypeError("Удалять из книги можно только контакты людей!")
 
         if self._is_exists(contact):
             for idx, member in self.items():
                 if member == contact:
-                    del self[idx]
+                    if _get_agree_from_user(contact) is False:
+                        return None
 
+                    del self[idx]
                     next_idx = len(self) + 1
 
                     for i in range(idx, next_idx):
@@ -210,7 +236,6 @@ class Book(dict):
                         del self[next_idx]
 
                     self.__next_idx = next_idx
-
                     return None
         else:
             raise ContactNotExists(contact)
