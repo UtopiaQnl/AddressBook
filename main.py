@@ -39,11 +39,28 @@ class ContactAddress:
     time_create: datetime
 
     def pprint_info(self) -> None:
-        print(f"\nКОНТАКТ\t- дата создания: {datetime.strftime(self.time_create, 'date: %H:%M %d.%m.%Y')}\n")
-        print(f"1. Имя\t-\t{self.name}")
-        print(f"2. Фамилия\t-\t{self.surname}")
+        """Красиво выводит информацию о контакте."""
+        print(f"\nКОНТАКТ\t- дата создания: {datetime.strftime(self.time_create, '%H:%M %d.%m.%Y')}\n")
+        print(f"1. Имя\t\t\t-\t{self.name}")
+        print(f"2. Фамилия\t\t-\t{self.surname}")
         print(f"3. Номер телефона\t-\t{self.number_phone}")
         print(f"4. Электронная почта\t-\t{self.email}\n")
+
+    def change_name(self) -> None:
+        """Отдельное окно. Позволяет изменить имя (name)."""
+        pass
+
+    def change_surname(self) -> None:
+        """Отдельное окно. Позволяет изменить фамилию (surname)."""
+        pass
+
+    def change_number_phone(self) -> None:
+        """Отдельное окно. Позволяет изменить номер телефона (number_phone)."""
+        pass
+
+    def change_email(self) -> None:
+        """Отдельное окно. Позволяет изменить почту (email)."""
+        pass
 
 
 class ContactNotExists(Exception):
@@ -103,7 +120,30 @@ class Book(dict):
         :param contact: ContactAddress
         :return: None
         """
-        pass
+        while True:
+            clear_console()
+            print("\nМЕНЮ РЕДАКТИРОВАНИЯ КОНТАКТА\n")
+
+            contact.pprint_info()
+
+            print("Что вы можете сделать:\n")
+
+            print("1 - Изменить Имя. (N)ame\n2 - Изменить Фамилию. (S)urname")
+            print("3 - Изменить Номер телефона. (P)hone\n4 - Изменить почту. (E)mail\n0 - Выход. (e)xit\n")
+
+            user_answer = input("$_> ").lower
+            match user_answer:
+                case '1' | 'имя' | 'name' | 'N' | 'n':
+                    contact.change_name()
+                case '2' | 'фамилия' | 'surname' | 'S':
+                    contact.change_surname()
+                case '3' | 'телефон' | 'номер' | 'phone' | 'P':
+                    contact.change_number_phone()
+                case '4' | 'почта' | 'email' | 'E':
+                    contact.change_email()
+                case '0' | 'exit' | 'e':
+                    clear_console()
+                    break
 
     def show_book(self) -> None:
         """Рисует телефонную книгу в консоли. В 3 этапа. Заголовок, тело и низ.
