@@ -304,17 +304,20 @@ class MainCommandHandler:
                             number_phone=number_phone,
                             email=email
                         )
-
+                        self.core_address_book.add_contact(contact=new_contact)
                         break
 
                     case '2' | 'нет' | 'no' | 'n':  # Просто очищается консоль, и всё запрашивать по новой
                         clear_console()
                         break
 
-        print("Созданный контакт", new_contact)
-        # TODO Реализовать метод Book.add_contact()
+        clear_console()
 
-        # TODO Сохраняем контакт с time.sleep(1). и print(end='\r')
+        print("Контакт успешно сохранен!\n")
+
+        for i in range(3, 0, -1):
+            print(f"Выход в главное меню через {i} сек...", end='\r')
+            sleep(1)
 
         clear_console()
 
@@ -362,7 +365,7 @@ class MainCommandHandler:
                 r"Made by Qu1nel")
 
         print(logo)
-        print('\nПриложение "Телефонная книга"\nАвтор: Qui1nel\n\nДля работы с приложением следуете инструкциям ниже.')
+        print('\nПриложение "Телефонная книга"\nАвтор: Qu1nel\n\nДля работы с приложением следуете инструкциям ниже.')
         print("\n1 - Добавить контакт в книгу.\t\t (a)dd\n2 - Показать телефонную книгу\t\t (s)how")
         print("3 - Удалить контакт из книги.\t\t (r)emove\n4 - Редактировать контакт в книге.\t (ed)it")
         print("5 - Найти контакт в книге.\t\t (sr)earch\n0 - Выйти из приложения.\t\t (e)xit\n")
