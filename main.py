@@ -18,6 +18,7 @@ import os
 import sys
 import pickle
 
+from time import sleep
 from dataclasses import dataclass
 
 MAX_WIDTH_NAME = 20  # максимальная ширина для имени
@@ -88,12 +89,6 @@ class Book(dict):
 
         :return: None
         """
-
-        # Максимальная ширина таблицы (да-да, зависит от констант...можно и реальные размеры консоли взять)
-        main_width_line = (6 + MAX_WIDTH_SURNAME + MAX_WIDTH_NUMBER_PHONE +
-                           MAX_WIDTH_EMAIL + MAX_WIDTH_ID + MAX_WIDTH_NAME)
-        main_line = '-' * main_width_line  # В отдельной переменной, чтобы по много раз не высчитывать строку
-
         header = {
             '№': MAX_WIDTH_ID,
             'Имя': MAX_WIDTH_NAME,
@@ -101,6 +96,11 @@ class Book(dict):
             'Телефон': MAX_WIDTH_NUMBER_PHONE,
             'Почта': MAX_WIDTH_EMAIL
         }
+
+        count_field_separators = len(header) + 1
+        main_width_line = sum((count_field_separators, MAX_WIDTH_SURNAME, MAX_WIDTH_NUMBER_PHONE,
+                               MAX_WIDTH_EMAIL, MAX_WIDTH_ID, MAX_WIDTH_NAME))
+        main_line = '-' * main_width_line
 
         def _draw_header() -> None:
             """Рисует шапку таблицы (заголовки)."""
@@ -250,7 +250,7 @@ class MainCommandHandler:
 
             self.core_address_book.show_book()  # Основная функция отрисовки таблицы*
 
-            print("1 - Следующая страница.\t(n)ext\n2 - Предыдущая страница.\t(p)revius\n0 - Выход (e)xit\n")
+            print("\n1 - Следующая страница.\t\t(n)ext\n2 - Предыдущая страница.\t(p)revius\n0 - Выход\t\t\t(e)xit\n")
             answer = input("$_> ")
             match answer:
                 # Следующая страница
@@ -258,7 +258,7 @@ class MainCommandHandler:
                     self.core_address_book.showing_page += 1
 
                 # Предыдущая страница
-                case '2' | 'prev' | 'pr' | 'p':
+                case '2' | 'previus' | 'prev' | 'pr' | 'p':
                     if (diff := self.core_address_book.showing_page - 1) < 1:  # чтобы не уйти в отрицательные числа
                         self.core_address_book.showing_page = 1
                     else:
@@ -284,8 +284,8 @@ class MainCommandHandler:
                 r"Made by Qu1nel")
 
         print(logo)
-        print('Приложение "Телефонная книга"\nАвтор: Qui1nel\n\nДля работы с приложением следуете инструкциям ниже.\n')
-        print("1 - Добавить контакт в книгу.\t\t (a)dd\n2 - Показать телефонную книгу\t\t (s)how")
+        print('\nПриложение "Телефонная книга"\nАвтор: Qui1nel\n\nДля работы с приложением следуете инструкциям ниже.')
+        print("\n1 - Добавить контакт в книгу.\t\t (a)dd\n2 - Показать телефонную книгу\t\t (s)how")
         print("3 - Удалить контакт из книги.\t\t (r)emove\n4 - Редактировать контакт в книге.\t (ed)it")
         print("5 - Найти контакт в книге.\t\t (sr)earch\n0 - Выйти из приложения.\t\t (e)xit\n")
 
@@ -297,6 +297,8 @@ def exit_from_program() -> None:
     """
     os.system("cls||clear")  # Очистка консоли где бы не был пользователь - так лучше.
     print("\nВы вышли из приложения. Удачного времени суток, пока!\n")
+    sleep(2)
+    os.system("cls||clear")  # Очистка консоли где бы не был пользователь - так лучше.
     sys.exit()
 
 
