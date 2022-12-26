@@ -202,7 +202,8 @@ class Book(dict):
         else:
             raise ContactNotExists(contact)
 
-    def edit_contact(self, contact: ContactAddress) -> None:
+    @staticmethod
+    def edit_contact(contact: ContactAddress) -> None:
         """Редактирует contact в книге. Не проверяет наличие contact в книге.
 
         :param contact: ContactAddress
@@ -511,7 +512,42 @@ class MainCommandHandler:
         
         :return: None 
         """
-        pass
+        while True:
+            clear_console()
+            print("\nВведите ID контакта, который вы хотели бы удалить.\n")
+
+            self.core_address_book.show_book()
+
+            print("\n> - Следующая страница.\t\t(n)ext\n< - Предыдущая страница.\t(p)revious\n0 - Выход\t\t\t(e)xit\n")
+            user_answer = input("$_> ")
+
+            match user_answer:
+                case '>' | 'next' | 'n':
+                    self.core_address_book.showing_page += 1
+
+                case '<' | 'previous' | 'prev' | 'pr' | 'p':
+                    if (delta := self.core_address_book.showing_page - 1) < 1:
+                        self.core_address_book.showing_page = 1
+                    else:
+                        self.core_address_book.showing_page = delta
+
+                case '0' | 'exit' | 'e':
+                    clear_console()
+                    break
+
+                case _ if user_answer.isdigit():
+
+                    finish_range = COUNT_CONTACTS_VIEW * self.core_address_book.showing_page
+                    start_range = finish_range - COUNT_CONTACTS_VIEW + 1
+
+                    user_input_idx = int(user_answer)
+                    needed_contact = self.core_address_book.get(user_input_idx - 1)
+
+                    if start_range <= user_input_idx <= finish_range and needed_contact is not None:
+                        self.core_address_book.remove_contact(contact=needed_contact)
+                    else:
+                        print(f"\nВы ввели не корректный ID для контакта. Контакта под ID-{user_input_idx} нет")
+                        sleep(1)
 
     def interface_editing_contact(self) -> None:
         """Обертка для Book.edit_contact. Позволяет изменять существующие контакты в книге.
