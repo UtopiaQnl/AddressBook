@@ -38,6 +38,25 @@ class ContactAddress:
     email: str
     time_create: datetime
 
+    def __eq__(self, another_contact) -> bool:
+        """Сравнивает контакт с another_contact.
+
+        :param another_contact: Экземпляр класса ContactAddress
+        :raise TypeError: Если another_contact не является экземпляром класс ContactAddress
+        :return: bool
+        """
+
+        if not isinstance(another_contact, ContactAddress):
+            raise TypeError("Для сравнения подходят только другие контакты!")
+
+        set_of_pairs_attrs = ((self.name, another_contact.name), (self.surname, another_contact.surname),
+                              (self.number_phone, another_contact.number_phone), (self.email, another_contact.email))
+
+        for first_attr, second_attr in set_of_pairs_attrs:
+            if first_attr != second_attr:
+                return False
+        return True
+
     def pprint_info(self) -> None:
         """Красиво выводит информацию о контакте."""
         print(f"\nКОНТАКТ\t- дата создания: {datetime.strftime(self.time_create, '%H:%M %d.%m.%Y')}\n")
