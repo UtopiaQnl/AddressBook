@@ -325,8 +325,7 @@ class MainCommandHandler:
                 # Удалить контакт из телефонной книги
                 case '3' | 'remove' | 'rem' | 'rm' | 'r':
                     # TODO дать выбрать пользователю тот контакт, который он возможно удалит.
-                    clear_console()  # TEMP
-                    print("...показ контактов, с последующим возможным удалением одного из них (3)")
+                    self.interface_removing_contact()
 
                 # Редактировать контакт в телефонной книге
                 case '4' | 'edit' | 'ed':
@@ -475,6 +474,13 @@ class MainCommandHandler:
                 case '0' | 'exit' | 'e':
                     clear_console()
                     break
+
+    def interface_removing_contact(self) -> None:
+        """Обертка для Book.remove_contact. Позволяет удалять контакты из книги.
+        
+        :return: None 
+        """
+        pass
 
     def interface_editing_contact(self) -> None:
         """Обертка для Book.edit_contact. Позволяет изменять существующие контакты в книге.
