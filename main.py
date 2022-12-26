@@ -70,6 +70,11 @@ class Book(dict):
         :raise TypeError: Если contact не является экземпляром класс ContactAddress
         :return: None
         """
+        if not isinstance(contact, ContactAddress):
+            raise TypeError("Добавлять в книгу можно только контакты человека!")
+
+        self[Book.__idx] = contact
+        Book.__idx += 1
 
     def remove_contact(self, contact: ContactAddress) -> None:
         """Удаляет contact из телефонной книги.
