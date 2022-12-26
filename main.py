@@ -172,7 +172,14 @@ class Book(dict):
         :raise ContactNotExists: Если contact не найден в телефонной книге
         :return: None
         """
-        pass
+        if not isinstance(contact, ContactAddress):
+            raise TypeError("Удалять из книги можно только контакты людей!")
+
+        if self._is_exists(contact):
+            Book.__idx -= 1
+            del self[Book.__idx]
+        else:
+            raise ContactNotExists(contact)
 
     def edit_contact(self, contact: ContactAddress) -> None:
         """Редактирует contact в книге. Не проверяет наличие contact в книге.
