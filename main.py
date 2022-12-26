@@ -105,7 +105,22 @@ class ContactAddress:
 
     def change_email(self) -> None:
         """Отдельное окно. Позволяет изменить почту (email)."""
-        pass
+        while True:
+            clear_console()
+            print("\nВведите новую почту")
+            new_email = input("$_> ")
+
+            if not new_email:
+                print("Вы ввели пустую почту. Изменения не засчитаны...")
+                sleep(1)
+                break
+            elif len(new_email) >= MAX_WIDTH_EMAIL:
+                print("Вы ввели слишком длинную почту. Изменения не засчитаны...")
+                sleep(1)
+                break
+
+            self.email = new_email
+            break
 
 
 class ContactNotExists(Exception):
@@ -354,7 +369,7 @@ class MainCommandHandler:
             while True:
                 _print_title()
                 print(info_string[0])
-                var = input("$_> ").capitalize()
+                var = input("$_> ")
                 if len(var) > max_length:
                     print('\n', info_string[1])
                     sleep(3)
@@ -369,12 +384,12 @@ class MainCommandHandler:
             name: str = valid_field(
                 info_string=("Введите имя для контакта:", "Слишком длинное имя! Введите имя по короче."),
                 max_length=MAX_WIDTH_NAME
-            )
+            ).capitalize()
 
             surname: str = valid_field(
                 info_string=("Введите фамилию для контакта:", "Слишком длинная фамилия! Введите фамилию по короче."),
                 max_length=MAX_WIDTH_SURNAME
-            )
+            ).capitalize()
 
             number_phone: str = valid_field(
                 info_string=("Введите имя номер телефона контакта:", "Слишком длинный номер! Введите номер по короче."),
