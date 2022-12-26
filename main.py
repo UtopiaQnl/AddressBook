@@ -257,7 +257,7 @@ class MainCommandHandler:
                 print(info_string[0])
                 var = input("$_> ").capitalize()
                 if len(var) > max_length:
-                    print(info_string[1])
+                    print('\n', info_string[1])
                     sleep(3)
                     clear_console()
                     continue
@@ -294,7 +294,7 @@ class MainCommandHandler:
 
                 print("Всё верно введено?\n")
 
-                print("1 - Да.\t (y)es\n2 - Нет. (n)o\n")
+                print("1 - Да.\t (y)es\n2 - Нет. (n)o\n0 - Выйти в главное меню. (e)xit\n")
 
                 user_answer: str = input("$_> ").lower()
                 match user_answer:
@@ -308,15 +308,18 @@ class MainCommandHandler:
                             email=email
                         )
                         self.core_address_book.add_contact(contact=new_contact)
+                        print("Контакт успешно сохранен!\n")
                         break
 
                     case '2' | 'нет' | 'no' | 'n':  # Просто очищается консоль, и всё запрашивать по новой
                         clear_console()
                         break
 
-        clear_console()
+                    case '0' | 'выход' | 'exit' | 'e':
+                        make_contact_status = True
+                        break
 
-        print("Контакт успешно сохранен!\n")
+        clear_console()
 
         for i in range(3, 0, -1):
             print(f"Выход в главное меню через {i} сек...", end='\r')
