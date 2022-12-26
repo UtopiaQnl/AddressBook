@@ -73,6 +73,8 @@ class Book(dict):
         if not isinstance(contact, ContactAddress):
             raise TypeError("Добавлять в книгу можно только контакты человека!")
 
+        # TODO сделать проверку на то, существует ли уже такой же контакт, реализовать соответственное исключение, обработать его где оно может выброситься
+
         self[Book.__idx] = contact
         Book.__idx += 1
 
@@ -256,6 +258,7 @@ class MainCommandHandler:
                 var = input("$_> ").capitalize()
                 if len(var) > max_length:
                     print(info_string[1])
+                    sleep(3)
                     clear_console()
                     continue
                 clear_console()
