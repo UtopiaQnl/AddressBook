@@ -159,7 +159,8 @@ class Book(dict):
             """Рисует низ таблицы контактов. + Показывает на какой страницы сейчас."""
             print(main_line)
             info = f' Страница {self.showing_page}'
-            print(f'|{info}' + ' ' * (main_width_line - len(info) - 2), end='|\n')
+            count_contacts = f'Всего контактов в книге {len(self)}'
+            print(f'|{info} {" " * (main_width_line - len(info) - len(count_contacts) - 4)}{count_contacts} |')
             print(main_line)
 
         _draw_header()
