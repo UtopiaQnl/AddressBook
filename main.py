@@ -336,7 +336,10 @@ class Book(dict):
         _draw_floor()
 
     def search_contact(self) -> None:
-        pass
+        """Производит поиск контакта в книге по одному из полей.
+
+        :return: None
+        """
 
     def _is_exists(self, contact: ContactAddress) -> bool:
         """ Предикат. Возвращает True если contact существует в книге, False иначе.
@@ -394,7 +397,6 @@ class MainCommandHandler:
 
                 # Удалить контакт из телефонной книги
                 case '3' | 'remove' | 'rem' | 'rm' | 'r':
-                    # TODO дать выбрать пользователю тот контакт, который он возможно удалит.
                     self.interface_removing_contact()
 
                 # Редактировать контакт в телефонной книге
@@ -403,9 +405,7 @@ class MainCommandHandler:
 
                 # Искать контакт в телефонной книге
                 case '5' | 'search' | 'sr':
-                    # TODO в отдельном окне запросить ввод одного из 4-ёх полей контакта с последующим поиском в книге
-                    clear_console()  # TEMP
-                    print("...отдельное окно с вводом одно из 4-ёх полей контакта, с последующим поиском в книге (5)")
+                    self.interface_searching_contact()
 
                 # Выйти из приложения
                 case '0' | 'exit' | 'ex' | 'e':
@@ -628,6 +628,13 @@ class MainCommandHandler:
                     else:
                         print(f"\nВы ввели не корректный ID для контакта. Контакта под ID-{user_input_idx} нет")
                         sleep(1)
+
+    def interface_searching_contact(self) -> None:
+        """Обертка для Book.search_contact. Позволяет искать контакты в книге.
+
+        :return: None
+        """
+        pass
 
     @staticmethod
     def welcome() -> None:
