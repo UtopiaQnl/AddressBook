@@ -231,7 +231,51 @@ class MainCommandHandler:
         """
         clear_console()
 
-        # TODO Сделать запрос 4-ёх полей: name, surname, number_phone, email
+        def _print_title() -> None:
+            print("Вы находитесь в меню ввода нового контакта в телефонную книгу. Следуйте инструкциям ниже.\n")
+
+            print("У вас будут запрошены 4 поля для контакта.\nВведите их и подтвердите введенные данные.")
+            print('И тогда контакт будет в телефонной книге.')
+            print('В будущем вы сможете его удалить  или редактировать по мере необходимости...\n')
+
+        def valid_field(info_string: tuple[str, str], max_length: int) -> str:
+            """Проверяет введенные пользователи строки на длину (проверяет валидность)
+
+            :param info_string: tuple[str, str]. 2-е строки. 1 - для того, что должен ввести пользователь. 2 - если валидность провалена.
+            :param max_length: int. Число, обозначающее максимальную длину введённой стоки пользователем.
+            :return: str. Введённая строка пользователем.
+            """
+            while True:
+                _print_title()
+                print(info_string[0])
+                var = input("$_> ").capitalize()
+                if len(var) > max_length:
+                    print(info_string[1])
+                    clear_console()
+                    continue
+                clear_console()
+                return var
+
+        name: str = valid_field(
+            info_string=("Введите имя для контакта:", "Слишком длинное имя! Введите имя по короче."),
+            max_length=MAX_WIDTH_NAME
+        )
+
+        surname: str = valid_field(
+            info_string=("Введите фамилию для контакта:", "Слишком длинная фамилия! Введите фамилию по короче."),
+            max_length=MAX_WIDTH_SURNAME
+        )
+
+        number_phone: str = valid_field(
+            info_string=("Введите имя номер телефона контакта:", "Слишком длинный номер! Введите номер по короче."),
+            max_length=MAX_WIDTH_NUMBER_PHONE
+        )
+
+        email: str = valid_field(
+            info_string=("Введите почту контакта:", "Слишком длинная почта! Введите почту по короче."),
+            max_length=MAX_WIDTH_EMAIL
+        )
+
         # TODO Подтвердить введённый данные. Далее создать контакт или ввести по новой
 
         # TODO Реализовать метод Book.add_contact()
