@@ -67,7 +67,22 @@ class ContactAddress:
 
     def change_surname(self) -> None:
         """Отдельное окно. Позволяет изменить фамилию (surname)."""
-        pass
+        while True:
+            clear_console()
+            print("\nВведите новую фамилию")
+            new_surname = input("$_> ").capitalize()
+
+            if not new_surname:
+                print("Вы ввели пустую фамилию. Изменения не засчитаны...")
+                sleep(1)
+                break
+            elif len(new_surname) >= MAX_WIDTH_SURNAME:
+                print("Вы ввели слишком длинную фамилию. Изменения не засчитаны...")
+                sleep(1)
+                break
+
+            self.surname = new_surname
+            break
 
     def change_number_phone(self) -> None:
         """Отдельное окно. Позволяет изменить номер телефона (number_phone)."""
@@ -135,6 +150,7 @@ class Book(dict):
         :param contact: ContactAddress
         :return: None
         """
+        # TODO сделать сохранения изменений, т.е. сохранять ли изменения, показывая что было до изменений. В таком случаи нужно менять contact.pprint_info(something запихнуть) -> .copy()
         while True:
             clear_console()
             print("\nМЕНЮ РЕДАКТИРОВАНИЯ КОНТАКТА\n")
@@ -470,6 +486,7 @@ class MainCommandHandler:
                         self.core_address_book.edit_contact(contact=needed_contact)
                     else:
                         print(f"\nВы ввели не корректный ID для контакта. Контакта под ID-{user_input_idx} нет")
+                        sleep(1)
 
     @staticmethod
     def welcome() -> None:
