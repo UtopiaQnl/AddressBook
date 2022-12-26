@@ -86,7 +86,22 @@ class ContactAddress:
 
     def change_number_phone(self) -> None:
         """Отдельное окно. Позволяет изменить номер телефона (number_phone)."""
-        pass
+        while True:
+            clear_console()
+            print("\nВведите новый номер телефона")
+            new_number_phone = input("$_> ").capitalize()
+
+            if not new_number_phone:
+                print("Вы ввели пустой номер телефона. Изменения не засчитаны...")
+                sleep(1)
+                break
+            elif len(new_number_phone) >= MAX_WIDTH_NUMBER_PHONE:
+                print("Вы ввели слишком длинный номер телефона. Изменения не засчитаны...")
+                sleep(1)
+                break
+
+            self.number_phone = new_number_phone
+            break
 
     def change_email(self) -> None:
         """Отдельное окно. Позволяет изменить почту (email)."""
