@@ -19,6 +19,7 @@ import sys
 import pickle
 
 from time import sleep
+from datetime import datetime
 from dataclasses import dataclass
 
 MAX_WIDTH_NAME = 20  # максимальная ширина для имени
@@ -35,6 +36,14 @@ class ContactAddress:
     surname: str
     number_phone: str
     email: str
+    time_create: datetime
+
+    def pprint_info(self) -> None:
+        print(f"\nКОНТАКТ\t- дата создания: {datetime.strftime(self.time_create, 'date: %H:%M %d.%m.%Y')}\n")
+        print(f"1. Имя\t-\t{self.name}")
+        print(f"2. Фамилия\t-\t{self.surname}")
+        print(f"3. Номер телефона\t-\t{self.number_phone}")
+        print(f"4. Электронная почта\t-\t{self.email}\n")
 
 
 class ContactNotExists(Exception):
@@ -291,6 +300,7 @@ class MainCommandHandler:
             )
 
             while True:
+                clear_console()
                 print("Вы только что ввели данные для контакта:\n")
                 print(f"\tИмя\t\t-\t'{name}'\n\tФамилия\t\t-\t'{surname}'"
                       f"\n\tНомер телефона\t-\t'{number_phone}'\n\tПочта\t\t-\t'{email}'\n")
@@ -308,7 +318,8 @@ class MainCommandHandler:
                             name=name,
                             surname=surname,
                             number_phone=number_phone,
-                            email=email
+                            email=email,
+                            time_create=datetime.today()
                         )
                         self.core_address_book.add_contact(contact=new_contact)
 
@@ -327,9 +338,9 @@ class MainCommandHandler:
                         break
 
         clear_console()
-
+        print()
         for i in range(3, 0, -1):
-            print(f"\nВыход в главное меню через {i} сек...", end='\r')
+            print(f"Выход в главное меню через {i} сек...", end='\r\b')
             sleep(1)
 
         clear_console()
@@ -397,7 +408,7 @@ class MainCommandHandler:
                     start_range = finish_range - COUNT_CONTACTS_VIEW + 1
 
                     user_input_idx = int(user_answer)
-                    needed_contact = self.core_address_book.get(user_input_idx)
+                    needed_contact = self.core_address_book.get(user_input_idx - 1)
 
                     if start_range <= user_input_idx <= finish_range and needed_contact is not None:
                         self.core_address_book.edit_contact(contact=needed_contact)
