@@ -176,8 +176,10 @@ class Book(dict):
             raise TypeError("Удалять из книги можно только контакты людей!")
 
         if self._is_exists(contact):
-            Book.__idx -= 1
-            del self[Book.__idx]
+            for idx, member in self.items():
+                if member == contact:
+                    del self[idx]
+                    return None
         else:
             raise ContactNotExists(contact)
 
@@ -437,7 +439,7 @@ class MainCommandHandler:
                         clear_console()
 
                         print("\nКонтакт успешно сохранен!\n")
-                        sleep(2)
+                        sleep(1)
                         break
 
                     case '2' | 'нет' | 'no' | 'n':  # Просто очищается консоль, и всё запрашивать по новой
