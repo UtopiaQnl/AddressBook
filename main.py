@@ -89,6 +89,11 @@ class Book(dict):
         pass
 
     def edit_contact(self, contact: ContactAddress) -> None:
+        """Редактирует contact в книге. Не проверяет наличие contact в книге.
+
+        :param contact: ContactAddress
+        :return: None
+        """
         pass
 
     def show_book(self) -> None:
@@ -214,9 +219,7 @@ class MainCommandHandler:
 
                 # Редактировать контакт в телефонной книге
                 case '4' | 'edit' | 'ed':
-                    # TODO дать выбрать пользователю тот контакт, который он возможно будет редактировать.
-                    clear_console()  # TEMP
-                    print("...показ контактов, с последующим возможным редактированием одного их них (4)")
+                    self.interface_editing_contact()
 
                 # Искать контакт в телефонной книге
                 case '5' | 'search' | 'sr':
@@ -308,7 +311,11 @@ class MainCommandHandler:
                             email=email
                         )
                         self.core_address_book.add_contact(contact=new_contact)
-                        print("Контакт успешно сохранен!\n")
+
+                        clear_console()
+
+                        print("\nКонтакт успешно сохранен!\n")
+                        sleep(2)
                         break
 
                     case '2' | 'нет' | 'no' | 'n':  # Просто очищается консоль, и всё запрашивать по новой
@@ -322,7 +329,7 @@ class MainCommandHandler:
         clear_console()
 
         for i in range(3, 0, -1):
-            print(f"Выход в главное меню через {i} сек...", end='\r')
+            print(f"\nВыход в главное меню через {i} сек...", end='\r')
             sleep(1)
 
         clear_console()
@@ -338,8 +345,8 @@ class MainCommandHandler:
             self.core_address_book.show_book()  # Основная функция отрисовки таблицы*
 
             print("\n1 - Следующая страница.\t\t(n)ext\n2 - Предыдущая страница.\t(p)revious\n0 - Выход\t\t\t(e)xit\n")
-            answer = input("$_> ")
-            match answer:
+            user_answer = input("$_> ")
+            match user_answer:
                 # Следующая страница
                 case '1' | 'next' | 'n':
                     self.core_address_book.showing_page += 1
@@ -355,6 +362,47 @@ class MainCommandHandler:
                 case '0' | 'exit' | 'e':
                     clear_console()
                     break
+
+    def interface_editing_contact(self) -> None:
+        """Обертка для Book.edit_contact. Позволяет изменять существующие контакты в книге.
+
+        :return: None
+        """
+        while True:
+            clear_console()
+            print("\nВведите ID контакта, который вы хотели бы изменить.\n")
+
+            self.core_address_book.show_book()
+
+            print("\n> - Следующая страница.\t\t(n)ext\n< - Предыдущая страница.\t(p)revious\n0 - Выход\t\t\t(e)xit\n")
+            user_answer = input("$_> ")
+
+            match user_answer:
+                case '>' | 'next' | 'n':
+                    self.core_address_book.showing_page += 1
+
+                case '<' | 'previous' | 'prev' | 'pr' | 'p':
+                    if (delta := self.core_address_book.showing_page - 1) < 1:
+                        self.core_address_book.showing_page = 1
+                    else:
+                        self.core_address_book.showing_page = delta
+
+                case '0' | 'exit' | 'e':
+                    clear_console()
+                    break
+
+                case _ if user_answer.isdigit():
+
+                    finish_range = COUNT_CONTACTS_VIEW * self.core_address_book.showing_page
+                    start_range = finish_range - COUNT_CONTACTS_VIEW + 1
+
+                    user_input_idx = int(user_answer)
+                    needed_contact = self.core_address_book.get(user_input_idx)
+
+                    if start_range <= user_input_idx <= finish_range and needed_contact is not None:
+                        self.core_address_book.edit_contact(contact=needed_contact)
+                    else:
+                        print(f"\nВы ввели не корректный ID для контакта. Контакта под ID-{user_input_idx} нет")
 
     @staticmethod
     def welcome() -> None:
