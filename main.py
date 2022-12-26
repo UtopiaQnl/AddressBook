@@ -250,7 +250,7 @@ class MainCommandHandler:
 
             self.core_address_book.show_book()  # Основная функция отрисовки таблицы*
 
-            print("\n1 - Следующая страница.\t\t(n)ext\n2 - Предыдущая страница.\t(p)revius\n0 - Выход\t\t\t(e)xit\n")
+            print("\n1 - Следующая страница.\t\t(n)ext\n2 - Предыдущая страница.\t(p)revious\n0 - Выход\t\t\t(e)xit\n")
             answer = input("$_> ")
             match answer:
                 # Следующая страница
@@ -258,7 +258,7 @@ class MainCommandHandler:
                     self.core_address_book.showing_page += 1
 
                 # Предыдущая страница
-                case '2' | 'previus' | 'prev' | 'pr' | 'p':
+                case '2' | 'previous' | 'prev' | 'pr' | 'p':
                     if (diff := self.core_address_book.showing_page - 1) < 1:  # чтобы не уйти в отрицательные числа
                         self.core_address_book.showing_page = 1
                     else:
