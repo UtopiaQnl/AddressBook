@@ -153,7 +153,7 @@ class ContactNotExists(Exception):
 class Book(dict):
     """Телефонная книга (словарь) для адресов людей.
 
-    __idx - Указатель на следующее место в книге
+    __next_idx - Указатель на следующее место в книге
     showing_page - Индекс страницы (для корректного вырисовывания книги в консоль)
 
     :methods:
@@ -165,7 +165,7 @@ class Book(dict):
         _is_exists(contact: ContactAddress) - Предикат. Проверяет существует ли ContactAddress в книге.
     """
 
-    __idx: int = 0
+    __next_idx: int = 1
     showing_page: int = 1
 
     def add_contact(self, contact: ContactAddress) -> None:
@@ -180,11 +180,13 @@ class Book(dict):
 
         # TODO сделать проверку на то, существует ли уже такой же контакт, реализовать соответственное исключение, обработать его где оно может выброситься
 
-        self[Book.__idx] = contact
-        Book.__idx += 1
+        self[Book.__next_idx] = contact
+        Book.__next_idx += 1
 
     def remove_contact(self, contact: ContactAddress) -> None:
         """Удаляет contact из телефонной книги.
+
+        Сдвигает значения с ключами в лево к единице.
 
         :param contact: Экземпляр класс ContactAddress
         :raise TypeError: Если contact не является экземпляром класс ContactAddress
@@ -198,6 +200,17 @@ class Book(dict):
             for idx, member in self.items():
                 if member == contact:
                     del self[idx]
+
+                    next_idx = len(self) + 1
+
+                    for i in range(idx, next_idx):
+                        self[i] = self[i + 1]
+
+                    if idx != next_idx:
+                        del self[next_idx]
+
+                    self.__next_idx = next_idx
+
                     return None
         else:
             raise ContactNotExists(contact)
@@ -268,8 +281,8 @@ class Book(dict):
             finish_range = COUNT_CONTACTS_VIEW * self.showing_page
             start_range = finish_range - COUNT_CONTACTS_VIEW
 
-            for idx in range(start_range, finish_range):
-                block_id = '|' + str(idx + 1).center(header['№'])
+            for idx in range(start_range + 1, finish_range + 1):
+                block_id = '|' + str(idx).center(header['№'])
                 print(block_id, end='')
 
                 if self.get(idx) is None:  # Если контакта нет
@@ -306,8 +319,8 @@ class Book(dict):
         :param contact: Экземпляр класс ContactAddress
         :return: bool[True, False]
         """
-        for idx in range(Book.__idx):
-            if self[idx] == contact:
+        for save_contact in self.values():
+            if save_contact == contact:
                 return True
         return False
 
@@ -541,7 +554,7 @@ class MainCommandHandler:
                     start_range = finish_range - COUNT_CONTACTS_VIEW + 1
 
                     user_input_idx = int(user_answer)
-                    needed_contact = self.core_address_book.get(user_input_idx - 1)
+                    needed_contact = self.core_address_book.get(user_input_idx)
 
                     if start_range <= user_input_idx <= finish_range and needed_contact is not None:
                         self.core_address_book.remove_contact(contact=needed_contact)
