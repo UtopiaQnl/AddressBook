@@ -277,7 +277,10 @@ class Book(dict):
         :param contact: Экземпляр класс ContactAddress
         :return: bool[True, False]
         """
-        pass
+        for idx in range(Book.__idx):
+            if self[idx] == contact:
+                return True
+        return False
 
 
 class MainCommandHandler:
