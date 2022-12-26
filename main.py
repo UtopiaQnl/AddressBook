@@ -256,28 +256,57 @@ class MainCommandHandler:
                 clear_console()
                 return var
 
-        name: str = valid_field(
-            info_string=("Введите имя для контакта:", "Слишком длинное имя! Введите имя по короче."),
-            max_length=MAX_WIDTH_NAME
-        )
+        make_contact_status: bool = False
 
-        surname: str = valid_field(
-            info_string=("Введите фамилию для контакта:", "Слишком длинная фамилия! Введите фамилию по короче."),
-            max_length=MAX_WIDTH_SURNAME
-        )
+        while not make_contact_status:
+            name: str = valid_field(
+                info_string=("Введите имя для контакта:", "Слишком длинное имя! Введите имя по короче."),
+                max_length=MAX_WIDTH_NAME
+            )
 
-        number_phone: str = valid_field(
-            info_string=("Введите имя номер телефона контакта:", "Слишком длинный номер! Введите номер по короче."),
-            max_length=MAX_WIDTH_NUMBER_PHONE
-        )
+            surname: str = valid_field(
+                info_string=("Введите фамилию для контакта:", "Слишком длинная фамилия! Введите фамилию по короче."),
+                max_length=MAX_WIDTH_SURNAME
+            )
 
-        email: str = valid_field(
-            info_string=("Введите почту контакта:", "Слишком длинная почта! Введите почту по короче."),
-            max_length=MAX_WIDTH_EMAIL
-        )
+            number_phone: str = valid_field(
+                info_string=("Введите имя номер телефона контакта:", "Слишком длинный номер! Введите номер по короче."),
+                max_length=MAX_WIDTH_NUMBER_PHONE
+            )
 
-        # TODO Подтвердить введённый данные. Далее создать контакт или ввести по новой
+            email: str = valid_field(
+                info_string=("Введите почту контакта:", "Слишком длинная почта! Введите почту по короче."),
+                max_length=MAX_WIDTH_EMAIL
+            )
 
+            while True:
+                print("Вы только что ввели данные для контакта:\n")
+                print(f"\tИмя\t\t-\t'{name}'\n\tФамилия\t\t-\t'{surname}'"
+                      f"\n\tНомер телефона\t-\t'{number_phone}'\n\tПочта\t\t-\t'{email}'\n")
+
+                print("Всё верно введено?\n")
+
+                print("1 - Да.\t (y)es\n2 - Нет. (n)o\n")
+
+                user_answer: str = input("$_> ").lower()
+                match user_answer:
+                    case '1' | 'да' | 'yes' | 'y':  # Всё что ввел пользователь верно - создается новый контакт и выход из цикла
+                        make_contact_status = True
+
+                        new_contact: ContactAddress = ContactAddress(
+                            name=name,
+                            surname=surname,
+                            number_phone=number_phone,
+                            email=email
+                        )
+
+                        break
+
+                    case '2' | 'нет' | 'no' | 'n':  # Просто очищается консоль, и всё запрашивать по новой
+                        clear_console()
+                        break
+
+        print("Созданный контакт", new_contact)
         # TODO Реализовать метод Book.add_contact()
 
         # TODO Сохраняем контакт с time.sleep(1). и print(end='\r')
