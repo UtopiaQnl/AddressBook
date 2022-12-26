@@ -184,7 +184,7 @@ class MainCommandHandler:
 
         :return: None
         """
-        os.system("cls||clear")  # Перед работой приложения, нужно очистить консоль - так лучше
+        clear_console()
         while True:
             self.welcome()  # Приветствие пользователя с выводом возможных команд
 
@@ -202,19 +202,19 @@ class MainCommandHandler:
                 # Удалить контакт из телефонной книги
                 case '3' | 'remove' | 'rem' | 'rm' | 'r':
                     # TODO дать выбрать пользователю тот контакт, который он возможно удалит.
-                    os.system("cls||clear")  # TEMP
+                    clear_console()  # TEMP
                     print("...показ контактов, с последующим возможным удалением одного из них (3)")
 
                 # Редактировать контакт в телефонной книге
                 case '4' | 'edit' | 'ed':
                     # TODO дать выбрать пользователю тот контакт, который он возможно будет редактировать.
-                    os.system("cls||clear")  # TEMP
+                    clear_console()  # TEMP
                     print("...показ контактов, с последующим возможным редактированием одного их них (4)")
 
                 # Искать контакт в телефонной книге
                 case '5' | 'search' | 'sr':
                     # TODO в отдельном окне запросить ввод одного из 4-ёх полей контакта с последующим поиском в книге
-                    os.system("cls||clear")  # TEMP
+                    clear_console()  # TEMP
                     print("...отдельное окно с вводом одно из 4-ёх полей контакта, с последующим поиском в книге (5)")
 
                 # Выйти из приложения
@@ -222,14 +222,14 @@ class MainCommandHandler:
                     exit_from_program()
 
                 case _:
-                    os.system("cls||clear")
+                    clear_console()
 
     def interface_adding_contact(self) -> None:
         """Обертка для Book.add_contact. Позволяет добавлять контакты в книгу.
 
         :return: None
         """
-        os.system("cls||clear")  # Чистая консоль - жизнь без проблем
+        clear_console()
 
         # TODO Сделать запрос 4-ёх полей: name, surname, number_phone, email
         # TODO Подтвердить введённый данные. Далее создать контакт или ввести по новой
@@ -238,7 +238,7 @@ class MainCommandHandler:
 
         # TODO Сохраняем контакт с time.sleep(1). и print(end='\r')
 
-        os.system("cls||clear")  # Грязь в главном меню - неуважение родственников
+        clear_console()
 
     def board_display_interface(self) -> None:
         """Обертка для Book.show_book. Позволяет перелистывать книгу.
@@ -246,7 +246,7 @@ class MainCommandHandler:
         :return: None
         """
         while True:
-            os.system("cls||clear")  # Очистить консоль - дело святое
+            clear_console()
 
             self.core_address_book.show_book()  # Основная функция отрисовки таблицы*
 
@@ -266,7 +266,7 @@ class MainCommandHandler:
 
                 # Выход в главное меню
                 case '0' | 'exit' | 'e':
-                    os.system("cls||clear")  # Нужно очистить, т.к. в главном меню - главное меню, а не таблица
+                    clear_console()
                     break
 
     @staticmethod
@@ -290,15 +290,20 @@ class MainCommandHandler:
         print("5 - Найти контакт в книге.\t\t (sr)earch\n0 - Выйти из приложения.\t\t (e)xit\n")
 
 
+def clear_console() -> None:
+    """Просто очищает консоль."""
+    os.system("cls||clear")
+
+
 def exit_from_program() -> None:
     """Очищает консоль. Выводит сообщение о выходе их приложения. Выходит из приложения.
 
     :return: None
     """
-    os.system("cls||clear")  # Очистка консоли где бы не был пользователь - так лучше.
+    clear_console()
     print("\nВы вышли из приложения. Удачного времени суток, пока!\n")
     sleep(2)
-    os.system("cls||clear")  # Очистка консоли где бы не был пользователь - так лучше.
+    clear_console()
     sys.exit()
 
 
