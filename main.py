@@ -661,13 +661,17 @@ class MainCommandHandler:
             user_answer = input("$_> ").lower()
             match user_answer:
                 case '1' | 'имя' | 'имени' | 'name' | 'N' | 'n':
-                    self.core_address_book.search_contact(name=user_answer)
+                    name = input("Введите имя:\n$_> ")
+                    self.core_address_book.search_contact(name=name)
                 case '2' | 'фамилия' | 'фамилии' | 'surname' | 'S':
-                    self.core_address_book.search_contact(surname=user_answer)
+                    surname = input("Введите фамилию:\n$_> ")
+                    self.core_address_book.search_contact(surname=surname)
                 case '3' | 'телефон' | 'номер' | 'номеру' | 'phone' | 'P':
-                    self.core_address_book.search_contact(phone=user_answer)
+                    number_phone = input("Введите номер телефона:\n$_> ")
+                    self.core_address_book.search_contact(phone=number_phone)
                 case '4' | 'почта' | 'почте' | 'email' | 'E':
-                    self.core_address_book.search_contact(email=user_answer)
+                    email = input("Введите почту:\n$_> ")
+                    self.core_address_book.search_contact(email=email)
                 case '0' | 'exit' | 'e':
                     clear_console()
                     break
