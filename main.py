@@ -335,11 +335,26 @@ class Book(dict):
         _draw_body()
         _draw_floor()
 
-    def search_contact(self) -> None:
+    def search_contact(self,
+                       name: str | None = None,
+                       surname: str | None = None,
+                       phone: str | None = None,
+                       email: str | None = None) -> None:
         """Производит поиск контакта в книге по одному из полей.
 
+        Функция не работает, когда переданы несколько полей для поиска, иначе TypeError
+
+        :param name: str. Имя по которому будет производиться поиск.
+        :param surname: str. Фамилия по которой будет производиться поиск.
+        :param phone: str. Номер телефона по которому будет производиться поиск.
+        :param email: str. Почта по которой будет производиться поиск.
+        :raise TypeError: В случаи передачи несколько ключевых аргументов.
         :return: None
         """
+        if (count_of_none := (name, surname, phone, email).count(None)) != 3:
+            raise TypeError(f"Метод принимает только один ключевой аргумент, а передано {4 - count_of_none}")
+
+        return None
 
     def _is_exists(self, contact: ContactAddress) -> bool:
         """ Предикат. Возвращает True если contact существует в книге, False иначе.
@@ -634,7 +649,28 @@ class MainCommandHandler:
 
         :return: None
         """
-        pass
+        while True:
+            clear_console()
+            print("\nМЕНЮ ПОИСКА КОНТАКТА\n")
+
+            print("\nЧто вы можете сделать:\n")
+
+            print("1 - Найти по имени. (N)ame\n2 - Найти по фамилии. (S)urname")
+            print("3 - Найти по номеру телефона. (P)hone\n4 - Найти по почте. (E)mail\n0 - Выход. (e)xit\n")
+
+            user_answer = input("$_> ").lower()
+            match user_answer:
+                case '1' | 'имя' | 'имени' | 'name' | 'N' | 'n':
+                    self.core_address_book.search_contact(name=user_answer)
+                case '2' | 'фамилия' | 'фамилии' | 'surname' | 'S':
+                    self.core_address_book.search_contact(surname=user_answer)
+                case '3' | 'телефон' | 'номер' | 'номеру' | 'phone' | 'P':
+                    self.core_address_book.search_contact(phone=user_answer)
+                case '4' | 'почта' | 'почте' | 'email' | 'E':
+                    self.core_address_book.search_contact(email=user_answer)
+                case '0' | 'exit' | 'e':
+                    clear_console()
+                    break
 
     @staticmethod
     def welcome() -> None:
