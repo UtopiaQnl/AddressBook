@@ -354,7 +354,36 @@ class Book(dict):
         if (count_of_none := (name, surname, phone, email).count(None)) != 3:
             raise TypeError(f"Метод принимает только один ключевой аргумент, а передано {4 - count_of_none}")
 
-        return None
+        target = f'{name}{surname}{phone}{email}'.replace('None', '').lower().strip()
+        all_contacts: list[ContactAddress] = list(self.values())
+
+        find_contacts: list[ContactAddress] = []
+
+        for contact in all_contacts:
+
+            name_eq: bool = isinstance(contact.name, str) and contact.name.lower().strip() == target
+            surname_eq: bool = isinstance(contact.surname, str) and contact.surname.lower().strip() == target
+            phone_eq: bool = isinstance(contact.number_phone, str) and contact.number_phone.lower().strip() == target
+            email_eq: bool = isinstance(contact.email, str) and contact.email.lower().strip() == target
+
+            if any((name_eq, surname_eq, phone_eq, email_eq)):
+                find_contacts.append(contact)
+
+        if (count_find_contacts := len(find_contacts)) == 0:
+            print("Контакты не найдены!...")
+        else:
+            print(f"Найдено несколько контактов {count_find_contacts}")
+            for contact in find_contacts:
+                contact.pprint_info()
+
+        input("Нажмите Enter для выхода в меню")
+
+        print()
+        for i in range(5, 0, -1):
+            print(f"Выход в главное меню через {i} сек...", end='\r\b')
+            sleep(1)
+
+        clear_console()
 
     def _is_exists(self, contact: ContactAddress) -> bool:
         """ Предикат. Возвращает True если contact существует в книге, False иначе.
