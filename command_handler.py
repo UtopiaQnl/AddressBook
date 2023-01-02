@@ -10,13 +10,34 @@ from config import *
 
 class MainCommandHandler:
     """Класс-обработчик пользовательских команд телефонной книги в консоли.
-
-    :methods:
-        run() - Запуск приложения, с дальнейшим развитием действий.
+    |
+    |  Методы, определенные здесь:
+    |
+    |   run(self, /)
+    |       Запускает приложение. Отлавливает команды из консоли.
+    |
+    |   interface_adding_contact(self, /)
+    |       Добавляет контакт в книгу.
+    |
+    |   board_display_interface(self, /)
+    |       Позволяет просматривать книгу (Book).
+    |
+    |   interface_removing_contact(self, /)
+    |       Позволяет удалять контакт из книги (Book).
+    |
+    |   interface_editing_contact(self, /)
+    |       Позволяет редактировать контакт в книге (Book).
+    |
+    |   interface_searching_contact(self, /)
+    |       Позволяет искать контакт в книге (Book).
+    |
+    |   @staticmethod
+    |   welcome(/)
+    |       Выводит начальные инструкции для пользователя в консоль.
     """
 
     def __init__(self, address_book: Book):
-        self.core_address_book = address_book
+        self.core_address_book: Book = address_book
 
     def run(self) -> None:
         """Запускает приложение. Отлавливает начальные команды пользователя.
@@ -93,7 +114,7 @@ class MainCommandHandler:
             while True:
                 _print_title()
                 print(info_string[0])
-                var = input("$_> ")
+                var: str = input("$_> ")
                 if len(var) > max_length:
                     print('\n', info_string[1])
                     sleep(3)
@@ -138,7 +159,7 @@ class MainCommandHandler:
                 user_answer: str = input("$_> ").lower()
                 match user_answer:
                     case '1' | 'да' | 'yes' | 'y':  # Всё что ввел пользователь верно - создается новый контакт и выход из цикла
-                        make_contact_status = True
+                        make_contact_status: bool = True
 
                         new_contact: ContactAddress = ContactAddress(
                             name=name,
@@ -155,7 +176,7 @@ class MainCommandHandler:
                         sleep(1)
                         break
 
-                    case '2' | 'нет' | 'no' | 'n':  # Просто очищается консоль, и всё запрашивать по новой
+                    case '2' | 'нет' | 'no' | 'n':
                         clear_console()
                         break
 
@@ -182,7 +203,7 @@ class MainCommandHandler:
             self.core_address_book.show_book()  # Основная функция отрисовки таблицы*
 
             print("\n1 - Следующая страница.\t\t(n)ext\n2 - Предыдущая страница.\t(p)revious\n0 - Выход\t\t\t(e)xit\n")
-            user_answer = input("$_> ")
+            user_answer: str = input("$_> ")
             match user_answer:
                 # Следующая страница
                 case '1' | 'next' | 'n':
@@ -212,7 +233,7 @@ class MainCommandHandler:
             self.core_address_book.show_book()
 
             print("\n> - Следующая страница.\t\t(n)ext\n< - Предыдущая страница.\t(p)revious\n0 - Выход\t\t\t(e)xit\n")
-            user_answer = input("$_> ")
+            user_answer: str = input("$_> ")
 
             match user_answer:
                 case '>' | 'next' | 'n':
@@ -230,11 +251,11 @@ class MainCommandHandler:
 
                 case _ if user_answer.isdigit():
 
-                    finish_range = COUNT_CONTACTS_VIEW * self.core_address_book.showing_page
-                    start_range = finish_range - COUNT_CONTACTS_VIEW + 1
+                    finish_range: int = COUNT_CONTACTS_VIEW * self.core_address_book.showing_page
+                    start_range: int = finish_range - COUNT_CONTACTS_VIEW + 1
 
-                    user_input_idx = int(user_answer)
-                    needed_contact = self.core_address_book.get(user_input_idx)
+                    user_input_idx: int = int(user_answer)
+                    needed_contact: ContactAddress = self.core_address_book.get(user_input_idx)
 
                     if start_range <= user_input_idx <= finish_range and needed_contact is not None:
                         self.core_address_book.remove_contact(contact=needed_contact)
@@ -254,7 +275,7 @@ class MainCommandHandler:
             self.core_address_book.show_book()
 
             print("\n> - Следующая страница.\t\t(n)ext\n< - Предыдущая страница.\t(p)revious\n0 - Выход\t\t\t(e)xit\n")
-            user_answer = input("$_> ")
+            user_answer: str = input("$_> ")
 
             match user_answer:
                 case '>' | 'next' | 'n':
@@ -272,11 +293,11 @@ class MainCommandHandler:
 
                 case _ if user_answer.isdigit():
 
-                    finish_range = COUNT_CONTACTS_VIEW * self.core_address_book.showing_page
-                    start_range = finish_range - COUNT_CONTACTS_VIEW + 1
+                    finish_range: int = COUNT_CONTACTS_VIEW * self.core_address_book.showing_page
+                    start_range: int = finish_range - COUNT_CONTACTS_VIEW + 1
 
-                    user_input_idx = int(user_answer)
-                    needed_contact = self.core_address_book.get(user_input_idx - 1)
+                    user_input_idx: int = int(user_answer)
+                    needed_contact: ContactAddress = self.core_address_book.get(user_input_idx - 1)
 
                     if start_range <= user_input_idx <= finish_range and needed_contact is not None:
                         self.core_address_book.edit_contact(contact=needed_contact)
@@ -298,19 +319,19 @@ class MainCommandHandler:
             print("1 - Найти по имени. (N)ame\n2 - Найти по фамилии. (S)urname")
             print("3 - Найти по номеру телефона. (P)hone\n4 - Найти по почте. (E)mail\n0 - Выход. (e)xit\n")
 
-            user_answer = input("$_> ").lower()
+            user_answer: str = input("$_> ").lower()
             match user_answer:
                 case '1' | 'имя' | 'имени' | 'name' | 'N' | 'n':
-                    name = input("Введите имя:\n$_> ")
+                    name: str = input("Введите имя:\n$_> ")
                     self.core_address_book.search_contact(name=name)
                 case '2' | 'фамилия' | 'фамилии' | 'surname' | 'S':
-                    surname = input("Введите фамилию:\n$_> ")
+                    surname: str = input("Введите фамилию:\n$_> ")
                     self.core_address_book.search_contact(surname=surname)
                 case '3' | 'телефон' | 'номер' | 'номеру' | 'phone' | 'P':
-                    number_phone = input("Введите номер телефона:\n$_> ")
+                    number_phone: str = input("Введите номер телефона:\n$_> ")
                     self.core_address_book.search_contact(phone=number_phone)
                 case '4' | 'почта' | 'почте' | 'email' | 'E':
-                    email = input("Введите почту:\n$_> ")
+                    email: str = input("Введите почту:\n$_> ")
                     self.core_address_book.search_contact(email=email)
                 case '0' | 'exit' | 'e':
                     clear_console()
@@ -322,7 +343,7 @@ class MainCommandHandler:
 
         :return: None
         """
-        logo = ("             _     _                     ____              _" + '\n' +
+        logo: str = ("             _     _                     ____              _" + '\n' +
                 r"    /\      | |   | |                   |  _ \            | |" + '\n' +
                 r"   /  \   __| | __| |_ __ ___  ___ ___  | |_) | ___   ___ | | __" + '\n' +
                 r"  / /\ \ / _` |/ _` | '__/ _ \/ __/ __| |  _ < / _ \ / _ \| |/ /" + '\n' +
