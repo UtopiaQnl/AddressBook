@@ -4,3 +4,4 @@ MAX_WIDTH_NUMBER_PHONE = 20  # максимальная ширина для но
 MAX_WIDTH_EMAIL = 30  # максимальная ширина для электронной почты
 MAX_WIDTH_ID = 5  # максимальная длина для id контакта
 COUNT_CONTACTS_VIEW = 15  # кол-во показываемых контактов
+SAVE_FILE_NAME: str = "address_book.db"
