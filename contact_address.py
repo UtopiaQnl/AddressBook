@@ -6,6 +6,32 @@ from tools import clear_console
 
 @dataclass
 class ContactAddress:
+    """Дата класс для хранения данных о контакте.
+    |
+    |  Основные поля:
+    |   name: str - Имя контакта
+    |   surname: str - Фамилия контакта
+    |   number_phone: str - Номер телефона контакта
+    |   email: str - Электронная почта контакта
+    |   time_create: datetime - Время создания контакта
+    |
+    |  Методы, определенные здесь:
+    |
+    |   pprint_info(self, /)
+    |       Выводит информацию (поля) контакта в консоль.
+    |
+    |   change_name(self, /)
+    |       Изменяет поле name.
+    |
+    |   change_surname(self, /)
+    |       Изменяет поле surname.
+    |
+    |   change_number_phone(self, /)
+    |       Изменяет поле number_phone.
+    |
+    |   change_email(self, /)
+    |       Изменяет поле email.
+    """
     name: str
     surname: str
     number_phone: str
@@ -13,7 +39,7 @@ class ContactAddress:
     time_create: datetime
 
     def __eq__(self, another_contact) -> bool:
-        """Сравнивает контакт с another_contact.
+        """Сравнивает контакт (self) с another_contact.
 
         :param another_contact: Экземпляр класса ContactAddress
         :raise TypeError: Если another_contact не является экземпляром класс ContactAddress
