@@ -1,3 +1,6 @@
+import os
+import pickle
+
 from contact_address import ContactAddress
 from tools import clear_console
 
@@ -23,11 +26,10 @@ class Book(dict):
     |   add_contact(self, contact: ContactAddress, /)
     |       Добавляет экземпляр contact в книгу.
     |
-    |   remove_contact(contact: ContactAddress, /)
+    |   remove_contact(self, contact: ContactAddress, /)
     |       Удаляет экземпляр contact из книги.
     |
-    |   @staticmethod
-    |   edit_contact(contact: ContactAddress, /)
+    |   edit_contact(self, contact: ContactAddress, /)
     |       Позволяет редактировать contact в книге.
     |
     |   show_board(self, /)
@@ -38,10 +40,22 @@ class Book(dict):
     |
     |   _is_exists(self, contact: ContactAddress, /)
     |       Предикат. Проверяет существует ли contact в книге.
+    |
+    |   _save_book(self, /)
+    |       Сохраняет книгу в файл SAVE_FILE_NAME.
     """
 
     __next_idx: int = 1
     showing_page: int = 1
+
+    def __init__(self, saved_dict: dict | None = None):
+        super().__init__()
+        if saved_dict is not None:
+            Book.__next_idx = saved_dict['next_idx']
+            Book.showing_page = saved_dict['page_idx']
+            for key, value in saved_dict.items():
+                if key != 'page_idx' and key != 'next_idx':
+                    self[key] = ContactAddress(saved_contact=value)
 
     def add_contact(self, contact: ContactAddress) -> None:
         """Добавляет contact в телефонную книгу.
@@ -57,6 +71,7 @@ class Book(dict):
 
         self[Book.__next_idx] = contact
         Book.__next_idx += 1
+        self._save_book()
 
     def remove_contact(self, contact: ContactAddress) -> None:
         """Удаляет contact из телефонной книги.
@@ -110,13 +125,13 @@ class Book(dict):
                     if idx != next_idx:
                         del self[next_idx]
 
-                    self.__next_idx = next_idx
+                    Book.__next_idx = next_idx
+                    self._save_book()
                     return None
         else:
             raise ContactNotExists(contact)
 
-    @staticmethod
-    def edit_contact(contact: ContactAddress) -> None:
+    def edit_contact(self, contact: ContactAddress) -> None:
         """Редактирует contact в книге.
 
         :param contact: ContactAddress
@@ -146,6 +161,7 @@ class Book(dict):
                     contact.change_email()
                 case '0' | 'exit' | 'e':
                     clear_console()
+                    self._save_book()
                     break
 
     def show_book(self) -> None:
@@ -269,3 +285,25 @@ class Book(dict):
             if save_contact == contact:
                 return True
         return False
+
+    def _save_book(self) -> None:
+        """Сохраняет книгу в файл SAVE_FILE_NAME (конфиг).
+
+        :raises IOError: Если файл SAVE_FILE_NAME отсутствует.
+        :return: None
+        """
+        if os.path.exists(SAVE_FILE_NAME):
+            with open(SAVE_FILE_NAME, 'wb') as f:
+                saved_pack: dict = {'next_idx': Book.__next_idx, 'page_idx': Book.showing_page}
+
+                for idx, contact in self.items():
+                    saved_pack[idx] = {}
+                    saved_pack[idx]['name'] = contact.name
+                    saved_pack[idx]['surname'] = contact.surname
+                    saved_pack[idx]['phone'] = contact.number_phone
+                    saved_pack[idx]['email'] = contact.email
+                    saved_pack[idx]['time'] = contact.time_create
+
+                pickle.dump(saved_pack, f)
+        else:
+            raise IOError
