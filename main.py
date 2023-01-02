@@ -22,9 +22,9 @@ from tools import exit_from_program
 
 
 def main() -> None:
-    main_book = Book()
+    main_book: Book = Book()
 
-    program = MainCommandHandler(address_book=main_book)
+    program: MainCommandHandler = MainCommandHandler(address_book=main_book)
     try:
         program.run()
     except KeyboardInterrupt:
