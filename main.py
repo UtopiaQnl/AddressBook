@@ -14,15 +14,39 @@ Python3.10+
 
 __author__ = 'Qu1nel'
 
+import os
+import pickle
+
 from command_handler import MainCommandHandler
 from contact_address import ContactAddress
 from book import Book
 
-from tools import exit_from_program
+from tools import exit_from_program, create_file
+from config import *
+
+
+def read_address_book_from_file() -> Book:
+    """Читает Book из файла если тот существует, иначе создает новый.
+
+    :return: Book
+    """
+    if os.path.exists(SAVE_FILE_NAME):
+        if os.path.getsize(SAVE_FILE_NAME) == 0:
+            book: Book = Book()
+        else:
+            with open(SAVE_FILE_NAME, 'rb') as file_address_book:
+                book: Book = Book(pickle.load(file_address_book))
+    else:
+        book: Book = Book()
+        if create_file(SAVE_FILE_NAME) is False:
+            print("ОШИБКА! НЕ УДАЛОСЬ СОЗДАТЬ БАЗУ ДАННЫХ КОНТАКТОВ...")
+            exit_from_program()
+
+    return book
 
 
 def main() -> None:
-    main_book: Book = Book()
+    main_book: Book = read_address_book_from_file()
 
     program: MainCommandHandler = MainCommandHandler(address_book=main_book)
     try:
