@@ -18,3 +18,22 @@ def exit_from_program() -> None:
     sleep(2)
     clear_console()
     sys.exit()
+
+
+def create_file(file_name: str) -> bool:
+    """Создает файл с именем file_name.
+
+    В случаи успешного создания файла возвращает True; False иначе.
+
+    :param file_name: Имя создаваемого файла.
+    :return: bool
+    """
+    f: IO | None = None
+    try:
+        f = open(file_name, 'tw')
+    except Exception as exc:
+        print(exc)
+
+    if f is None:
+        return False
+    return True
