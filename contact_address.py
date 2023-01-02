@@ -4,9 +4,8 @@ from dataclasses import dataclass
 from tools import clear_console
 
 
-@dataclass
 class ContactAddress:
-    """Дата класс для хранения данных о контакте.
+    """Класс для хранения данных о контакте.
     |
     |  Основные поля:
     |   name: str - Имя контакта
@@ -37,6 +36,27 @@ class ContactAddress:
     number_phone: str
     email: str
     time_create: datetime
+
+    def __init__(self,
+                 name: str | None = None,
+                 surname: str | None = None,
+                 number_phone: str | None = None,
+                 email: str | None = None,
+                 time_create: datetime | None = None,
+                 saved_contact: dict | None = None):
+
+        if saved_contact is not None:
+            self.name = saved_contact['name']
+            self.surname = saved_contact['surname']
+            self.number_phone = saved_contact['phone']
+            self.email = saved_contact['email']
+            self.time_create = saved_contact['time']
+        else:
+            self.name = name
+            self.surname = surname
+            self.number_phone = number_phone
+            self.email = email
+            self.time_create = time_create
 
     def __eq__(self, another_contact) -> bool:
         """Сравнивает контакт (self) с another_contact.
