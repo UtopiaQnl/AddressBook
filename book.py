@@ -6,25 +6,38 @@ from config import *
 
 class ContactNotExists(Exception):
     def __init__(self, contact: ContactAddress):
-        self.contact = contact
+        self.contact: ContactAddress = contact
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'Контакт {self.contact} не существует в телефонной книге!'
 
 
 class Book(dict):
-    """Телефонная книга (словарь) для адресов людей.
-
-    __next_idx - Указатель на следующее место в книге
-    showing_page - Индекс страницы (для корректного вырисовывания книги в консоль)
-
-    :methods:
-        add_contact(contact: ContactAddress) - Добавляет экземпляр ContactAddress в книгу.
-        remove_contact(contact: ContactAddress) - Удаляет экземпляр ContactAddress из книги.
-        edit_contact() - Позволяет редактировать ContactAddress в книге.
-        show_board() - Показывает пользователю телефонную книгу постранично.
-        search_contact() - Ищет контакт в книге по 4 основным полям.
-        _is_exists(contact: ContactAddress) - Предикат. Проверяет существует ли ContactAddress в книге.
+    """Телефонная книга (наследован от dict) для адресов людей.
+    |
+    |  __next_idx - Указатель на следующее место в книге
+    |  showing_page - Индекс страницы активной страницы (для корректного рисовки в консоль)
+    |
+    |  Методы, определенные здесь:
+    |
+    |   add_contact(self, contact: ContactAddress, /)
+    |       Добавляет экземпляр contact в книгу.
+    |
+    |   remove_contact(contact: ContactAddress, /)
+    |       Удаляет экземпляр contact из книги.
+    |
+    |   @staticmethod
+    |   edit_contact(contact: ContactAddress, /)
+    |       Позволяет редактировать contact в книге.
+    |
+    |   show_board(self, /)
+    |       Показывает пользователю телефонную книгу постранично.
+    |
+    |   search_contact(self, /)
+    |       Ищет контакт в книге по 4 основным полям.
+    |
+    |   _is_exists(self, contact: ContactAddress, /)
+    |       Предикат. Проверяет существует ли contact в книге.
     """
 
     __next_idx: int = 1
@@ -89,7 +102,7 @@ class Book(dict):
                         return None
 
                     del self[idx]
-                    next_idx = len(self) + 1
+                    next_idx: int = len(self) + 1
 
                     for i in range(idx, next_idx):
                         self[i] = self[i + 1]
@@ -104,7 +117,7 @@ class Book(dict):
 
     @staticmethod
     def edit_contact(contact: ContactAddress) -> None:
-        """Редактирует contact в книге. Не проверяет наличие contact в книге.
+        """Редактирует contact в книге.
 
         :param contact: ContactAddress
         :return: None
@@ -121,7 +134,7 @@ class Book(dict):
             print("1 - Изменить Имя. (N)ame\n2 - Изменить Фамилию. (S)urname")
             print("3 - Изменить Номер телефона. (P)hone\n4 - Изменить почту. (E)mail\n0 - Выход. (e)xit\n")
 
-            user_answer = input("$_> ").lower()
+            user_answer: str = input("$_> ").lower()
             match user_answer:
                 case '1' | 'имя' | 'name' | 'N' | 'n':
                     contact.change_name()
@@ -136,7 +149,9 @@ class Book(dict):
                     break
 
     def show_book(self) -> None:
-        """Рисует телефонную книгу в консоли. В 3 этапа. Заголовок, тело и низ.
+        """Показывает (рисует) телефонную книгу в консоли.
+
+        Отрисовка происходит в 3-и этапа: шапка, тело и низ.
 
         :return: None
         """
@@ -172,7 +187,7 @@ class Book(dict):
                 block_id = '|' + str(idx).center(header['№'])
                 print(block_id, end='')
 
-                if self.get(idx) is None:  # Если контакта нет
+                if self.get(idx) is None:
                     print('|' + '...'.center(header['Имя']) +
                           '|' + '...'.center(header['Фамилия']) +
                           '|' + '...'.center(header['Телефон']) +
@@ -186,7 +201,7 @@ class Book(dict):
                     print(block_name + block_surname + block_phone + block_email, end='|\n')
 
         def _draw_floor() -> None:
-            """Рисует низ таблицы контактов. + Показывает на какой страницы сейчас."""
+            """Рисует низ таблицы контактов."""
             print(main_line)
             info = f' Страница {self.showing_page}'
             count_contacts = f'Всего контактов в книге {len(self)}'
@@ -197,11 +212,8 @@ class Book(dict):
         _draw_body()
         _draw_floor()
 
-    def search_contact(self,
-                       name: str | None = None,
-                       surname: str | None = None,
-                       phone: str | None = None,
-                       email: str | None = None) -> None:
+    def search_contact(self, name: str | None = None, surname: str | None = None,
+                       phone: str | None = None, email: str | None = None) -> None:
         """Производит поиск контакта в книге по одному из полей.
 
         Функция не работает, когда переданы несколько полей для поиска, иначе TypeError
@@ -216,7 +228,7 @@ class Book(dict):
         if (count_of_none := (name, surname, phone, email).count(None)) != 3:
             raise TypeError(f"Метод принимает только один ключевой аргумент, а передано {4 - count_of_none}")
 
-        target = f'{name}{surname}{phone}{email}'.replace('None', '').lower().strip()
+        target: str = f'{name}{surname}{phone}{email}'.replace('None', '').lower().strip()
         all_contacts: list[ContactAddress] = list(self.values())
 
         find_contacts: list[ContactAddress] = []
@@ -248,7 +260,7 @@ class Book(dict):
         clear_console()
 
     def _is_exists(self, contact: ContactAddress) -> bool:
-        """ Предикат. Возвращает True если contact существует в книге, False иначе.
+        """Предикат. Возвращает True если contact существует в книге, False иначе.
 
         :param contact: Экземпляр класс ContactAddress
         :return: bool[True, False]
