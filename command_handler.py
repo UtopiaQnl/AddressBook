@@ -325,7 +325,7 @@ class MainCommandHandler:
             print("1 - Найти по имени. (N)ame\n2 - Найти по фамилии. (S)urname")
             print("3 - Найти по номеру телефона. (P)hone\n4 - Найти по почте. (E)mail\n0 - Выход. (e)xit\n")
 
-            user_answer: str = input("$_> ").lower()
+            user_answer: str = input("$_> ")
             match user_answer:
                 case '1' | 'имя' | 'имени' | 'name' | 'N' | 'n':
                     name: str = input("Введите имя:\n$_> ")

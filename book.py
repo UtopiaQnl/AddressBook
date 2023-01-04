@@ -132,19 +132,30 @@ class Book(dict):
         :param contact: ContactAddress
         :return: None
         """
-        # TODO сделать сохранения изменений, т.е. сохранять ли изменения, показывая что было до изменений. В таком случаи нужно менять contact.pprint_info(something запихнуть) -> .copy()
+        old_contact: ContactAddress = contact.copy()
         while True:
             clear_console()
             print("\nМЕНЮ РЕДАКТИРОВАНИЯ КОНТАКТА\n")
 
             contact.pprint_info()
 
+            if old_contact.name != contact.name:
+                print(f"Изменение* - имя:\t\t{old_contact.name} --> {contact.name}")
+            if old_contact.surname != contact.surname:
+                print(f"Изменение* - фамилия:\t\t{old_contact.surname} --> {contact.surname}")
+            if old_contact.email != contact.email:
+                print(f"Изменение* - почта:\t\t{old_contact.email} --> {contact.email}")
+            if old_contact.number_phone != contact.number_phone:
+                print(f"Изменение* - номер телефона:\t\t{old_contact.number_phone} --> {contact.number_phone}")
+
             print("\nЧто вы можете сделать:\n")
 
-            print("1 - Изменить Имя. (N)ame\n2 - Изменить Фамилию. (S)urname")
-            print("3 - Изменить Номер телефона. (P)hone\n4 - Изменить почту. (E)mail\n0 - Выход. (e)xit\n")
+            print("1 - Изменить Имя.\t\t(N)ame\n2 - Изменить Фамилию.\t\t(S)urname")
+            print("3 - Изменить Номер телефона.\t(P)hone\n4 - Изменить почту.\t\t(E)mail")
+            print("0 - Выход с сохранением.\t(s)ave and exit\t(СОХРАНИТЬ ИЗМЕНЕНИЯ)")
+            print("9 - Выход без сохранения.\t(e)xit\t\t(НЕ СОХРАНЯТЬ ИЗМЕНЕНИЯ)")
 
-            user_answer: str = input("$_> ").lower()
+            user_answer: str = input("$_> ")
             match user_answer:
                 case '1' | 'имя' | 'name' | 'N' | 'n':
                     contact.change_name()
@@ -154,7 +165,15 @@ class Book(dict):
                     contact.change_number_phone()
                 case '4' | 'почта' | 'email' | 'E':
                     contact.change_email()
-                case '0' | 'exit' | 'e':
+                case '0' | 'save' | 's':
+                    clear_console()
+                    self._save_book()
+                    break
+                case '9' | 'e' | 'exit':
+                    contact.name = old_contact.name
+                    contact.surname = old_contact.surname
+                    contact.number_phone = old_contact.number_phone
+                    contact.email = old_contact.email
                     clear_console()
                     self._save_book()
                     break

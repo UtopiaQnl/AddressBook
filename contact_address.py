@@ -1,5 +1,6 @@
 from datetime import datetime
 from dataclasses import dataclass
+from time import sleep
 
 from tools import clear_console
 from config import *
@@ -31,6 +32,9 @@ class ContactAddress:
     |
     |   change_email(self, /)
     |       Изменяет поле email.
+    |
+    |   copy(self, /)
+    |       Возвращает копию объекта.
     """
     name: str
     surname: str
@@ -151,6 +155,19 @@ class ContactAddress:
 
             self.email = new_email
             break
+
+    def copy(self):
+        """Возвращает копию ContactAddress.
+
+        :return: ContactAddress
+        """
+        return ContactAddress(
+            dict(
+                name=self.name, surname=self.surname,
+                number_phone=self.number_phone,
+                email=self.email, time_create=self.time_create
+            )
+        )
 
 
 class ContactNotExists(Exception):
