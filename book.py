@@ -3,18 +3,10 @@ import pickle
 
 from time import sleep
 
-from contact_address import ContactAddress
+from contact_address import ContactAddress, ContactExists, ContactNotExists
 from tools import clear_console
 
 from config import *
-
-
-class ContactNotExists(Exception):
-    def __init__(self, contact: ContactAddress):
-        self.contact: ContactAddress = contact
-
-    def __str__(self) -> str:
-        return f'Контакт {self.contact} не существует в телефонной книге!'
 
 
 class Book(dict):
@@ -68,7 +60,9 @@ class Book(dict):
         if not isinstance(contact, ContactAddress):
             raise TypeError("Добавлять в книгу можно только контакты человека!")
 
-        # TODO сделать проверку на то, существует ли уже такой же контакт, реализовать соответственное исключение, обработать его где оно может выброситься
+        for saved_contact in self.values():
+            if contact == saved_contact:
+                raise ContactExists(saved_contact)
 
         self[Book.__next_idx] = contact
         Book.__next_idx += 1

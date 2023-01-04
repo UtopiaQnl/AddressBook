@@ -2,7 +2,7 @@ from time import sleep
 from datetime import datetime
 
 from book import Book
-from contact_address import ContactAddress
+from contact_address import ContactAddress, ContactExists
 from tools import clear_console, exit_from_program
 
 from config import *
@@ -169,11 +169,16 @@ class MainCommandHandler:
                                  time_create=datetime.today()
                                  )
                         )
-                        self.core_address_book.add_contact(contact=new_contact)
+                        try:
+                            self.core_address_book.add_contact(contact=new_contact)
+                        except ContactExists:
+                            clear_console()
+                            print("\nДанный контакт уже есть в базе данных! Попробуйте добавить другой...\n")
+                        else:
+                            clear_console()
+                            print("\nКонтакт успешно сохранен!\n")
 
-                        clear_console()
-
-                        print("\nКонтакт успешно сохранен!\n")
+                        sleep(1)
                         sleep(1)
                         break
 

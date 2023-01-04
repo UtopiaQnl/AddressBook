@@ -151,3 +151,19 @@ class ContactAddress:
 
             self.email = new_email
             break
+
+
+class ContactNotExists(Exception):
+    def __init__(self, contact: ContactAddress):
+        self.contact: ContactAddress = contact
+
+    def __str__(self) -> str:
+        return f'Контакт {self.contact} не существует в телефонной книге!'
+
+
+class ContactExists(Exception):
+    def __init__(self, contact: ContactAddress):
+        self.contact: ContactAddress = contact
+
+    def __str__(self) -> str:
+        return f'Контакт {self.contact} уже существует в телефонной книге!'
