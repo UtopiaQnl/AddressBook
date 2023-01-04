@@ -162,11 +162,12 @@ class MainCommandHandler:
                         make_contact_status: bool = True
 
                         new_contact: ContactAddress = ContactAddress(
-                            name=name,
-                            surname=surname,
-                            number_phone=number_phone,
-                            email=email,
-                            time_create=datetime.today()
+                            dict(name=name,
+                                 surname=surname,
+                                 number_phone=number_phone,
+                                 email=email,
+                                 time_create=datetime.today()
+                                 )
                         )
                         self.core_address_book.add_contact(contact=new_contact)
 
@@ -297,7 +298,7 @@ class MainCommandHandler:
                     start_range: int = finish_range - COUNT_CONTACTS_VIEW + 1
 
                     user_input_idx: int = int(user_answer)
-                    needed_contact: ContactAddress = self.core_address_book.get(user_input_idx - 1)
+                    needed_contact: ContactAddress = self.core_address_book.get(user_input_idx)
 
                     if start_range <= user_input_idx <= finish_range and needed_contact is not None:
                         self.core_address_book.edit_contact(contact=needed_contact)
@@ -324,15 +325,19 @@ class MainCommandHandler:
                 case '1' | 'имя' | 'имени' | 'name' | 'N' | 'n':
                     name: str = input("Введите имя:\n$_> ")
                     self.core_address_book.search_contact(name=name)
+                    break
                 case '2' | 'фамилия' | 'фамилии' | 'surname' | 'S':
                     surname: str = input("Введите фамилию:\n$_> ")
                     self.core_address_book.search_contact(surname=surname)
+                    break
                 case '3' | 'телефон' | 'номер' | 'номеру' | 'phone' | 'P':
                     number_phone: str = input("Введите номер телефона:\n$_> ")
                     self.core_address_book.search_contact(phone=number_phone)
+                    break
                 case '4' | 'почта' | 'почте' | 'email' | 'E':
                     email: str = input("Введите почту:\n$_> ")
                     self.core_address_book.search_contact(email=email)
+                    break
                 case '0' | 'exit' | 'e':
                     clear_console()
                     break

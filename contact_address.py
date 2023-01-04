@@ -2,6 +2,7 @@ from datetime import datetime
 from dataclasses import dataclass
 
 from tools import clear_console
+from config import *
 
 
 class ContactAddress:
@@ -37,26 +38,16 @@ class ContactAddress:
     email: str
     time_create: datetime
 
-    def __init__(self,
-                 name: str | None = None,
-                 surname: str | None = None,
-                 number_phone: str | None = None,
-                 email: str | None = None,
-                 time_create: datetime | None = None,
-                 saved_contact: dict | None = None):
+    def __init__(self, saved_contact: dict[str, str]):
+        """Для создания контакта необходим соответствующий словарь с данными контакта.
 
-        if saved_contact is not None:
-            self.name = saved_contact['name']
-            self.surname = saved_contact['surname']
-            self.number_phone = saved_contact['phone']
-            self.email = saved_contact['email']
-            self.time_create = saved_contact['time']
-        else:
-            self.name = name
-            self.surname = surname
-            self.number_phone = number_phone
-            self.email = email
-            self.time_create = time_create
+        :param saved_contact: dict[name: str, surname: str, number_phone: str, email: str, time_create: datetime]
+        """
+        self.name = saved_contact['name']
+        self.surname = saved_contact['surname']
+        self.number_phone = saved_contact['number_phone']
+        self.email = saved_contact['email']
+        self.time_create = saved_contact['time_create']
 
     def __eq__(self, another_contact) -> bool:
         """Сравнивает контакт (self) с another_contact.

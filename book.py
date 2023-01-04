@@ -1,6 +1,8 @@
 import os
 import pickle
 
+from time import sleep
+
 from contact_address import ContactAddress
 from tools import clear_console
 
@@ -48,14 +50,13 @@ class Book(dict):
     __next_idx: int = 1
     showing_page: int = 1
 
-    def __init__(self, saved_dict: dict | None = None):
+    def __init__(self, saved_bd: dict | None = None):
         super().__init__()
-        if saved_dict is not None:
-            Book.__next_idx = saved_dict['next_idx']
-            Book.showing_page = saved_dict['page_idx']
-            for key, value in saved_dict.items():
-                if key != 'page_idx' and key != 'next_idx':
-                    self[key] = ContactAddress(saved_contact=value)
+        if saved_bd is not None:
+            Book.__next_idx = saved_bd['next_idx']
+            Book.showing_page = saved_bd['page_idx']
+            for key, value in tuple(saved_bd.items())[2:]:  # После второго значения идут данные контактов
+                self[key] = ContactAddress(saved_contact=value)
 
     def add_contact(self, contact: ContactAddress) -> None:
         """Добавляет contact в телефонную книгу.
@@ -279,7 +280,7 @@ class Book(dict):
         """Предикат. Возвращает True если contact существует в книге, False иначе.
 
         :param contact: Экземпляр класс ContactAddress
-        :return: bool[True, False]
+        :return: bool
         """
         for save_contact in self.values():
             if save_contact == contact:
@@ -300,9 +301,9 @@ class Book(dict):
                     saved_pack[idx] = {}
                     saved_pack[idx]['name'] = contact.name
                     saved_pack[idx]['surname'] = contact.surname
-                    saved_pack[idx]['phone'] = contact.number_phone
+                    saved_pack[idx]['number_phone'] = contact.number_phone
                     saved_pack[idx]['email'] = contact.email
-                    saved_pack[idx]['time'] = contact.time_create
+                    saved_pack[idx]['time_create'] = contact.time_create
 
                 pickle.dump(saved_pack, f)
         else:
