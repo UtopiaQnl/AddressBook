@@ -3,7 +3,7 @@ from datetime import datetime
 
 from book import Book
 from contact_address import ContactAddress, ContactExists
-from tools import clear_console, exit_from_program
+from tools import clear_console, exit_from_program, valid_name, valid_email, valid_surname, valid_number_phone
 
 from config import *
 
@@ -104,14 +104,16 @@ class MainCommandHandler:
             print('И тогда контакт будет в телефонной книге.')
             print('В будущем вы сможете его удалить  или редактировать по мере необходимости...\n')
 
-        def valid_field(info_string: tuple[str, str], max_length: int) -> str:
+        def valid_field(info_string: tuple[str, str], max_length: int, flag: int) -> str:
             """Проверяет введенные пользователи строки на длину (проверяет валидность)
 
             :param info_string: tuple[str, str]. 2-е строки. 1 - для того, что должен ввести пользователь. 2 - если валидность провалена.
             :param max_length: int. Число, обозначающее максимальную длину введённой стоки пользователем.
+            :param flag: int. Число, обозначающее, что вводит пользователь. 1 - имя, 2 - фамилия, 3 - телефон, 4 - почта
             :return: str. Введённая строка пользователем.
             """
             while True:
+                clear_console()
                 _print_title()
                 print(info_string[0])
                 var: str = input("$_> ")
@@ -120,6 +122,25 @@ class MainCommandHandler:
                     sleep(3)
                     clear_console()
                     continue
+
+                match flag:
+                    case 1:
+                        status: bool = valid_name(var)
+                        if status:
+                            continue
+                    case 2:
+                        status: bool = valid_surname(var)
+                        if status:
+                            continue
+                    case 3:
+                        status: bool = valid_number_phone(var)
+                        if status:
+                            continue
+                    case 4:
+                        status: bool = valid_email(var)
+                        if status:
+                            continue
+
                 clear_console()
                 return var
 
@@ -128,22 +149,26 @@ class MainCommandHandler:
         while not make_contact_status:
             name: str = valid_field(
                 info_string=("Введите имя для контакта:", "Слишком длинное имя! Введите имя по короче."),
-                max_length=MAX_WIDTH_NAME
+                max_length=MAX_WIDTH_NAME,
+                flag=1
             ).capitalize()
 
             surname: str = valid_field(
                 info_string=("Введите фамилию для контакта:", "Слишком длинная фамилия! Введите фамилию по короче."),
-                max_length=MAX_WIDTH_SURNAME
+                max_length=MAX_WIDTH_SURNAME,
+                flag=2
             ).capitalize()
 
             number_phone: str = valid_field(
                 info_string=("Введите имя номер телефона контакта:", "Слишком длинный номер! Введите номер по короче."),
-                max_length=MAX_WIDTH_NUMBER_PHONE
+                max_length=MAX_WIDTH_NUMBER_PHONE,
+                flag=3
             )
 
             email: str = valid_field(
                 info_string=("Введите почту контакта:", "Слишком длинная почта! Введите почту по короче."),
-                max_length=MAX_WIDTH_EMAIL
+                max_length=MAX_WIDTH_EMAIL,
+                flag=4
             )
 
             while True:
@@ -329,18 +354,34 @@ class MainCommandHandler:
             match user_answer:
                 case '1' | 'имя' | 'имени' | 'name' | 'N' | 'n':
                     name: str = input("Введите имя:\n$_> ")
+                    status: bool = valid_name(name)
+                    if status:
+                        continue
+
                     self.core_address_book.search_contact(name=name)
                     break
                 case '2' | 'фамилия' | 'фамилии' | 'surname' | 'S':
                     surname: str = input("Введите фамилию:\n$_> ")
+                    status: bool = valid_surname(surname)
+                    if status:
+                        continue
+
                     self.core_address_book.search_contact(surname=surname)
                     break
                 case '3' | 'телефон' | 'номер' | 'номеру' | 'phone' | 'P':
                     number_phone: str = input("Введите номер телефона:\n$_> ")
+                    status: bool = valid_number_phone(number_phone)
+                    if status:
+                        continue
+
                     self.core_address_book.search_contact(phone=number_phone)
                     break
                 case '4' | 'почта' | 'почте' | 'email' | 'E':
                     email: str = input("Введите почту:\n$_> ")
+                    status: bool = valid_email(email)
+                    if status:
+                        continue
+
                     self.core_address_book.search_contact(email=email)
                     break
                 case '0' | 'exit' | 'e':

@@ -2,7 +2,7 @@ from datetime import datetime
 from dataclasses import dataclass
 from time import sleep
 
-from tools import clear_console
+from tools import clear_console, valid_name, valid_surname, valid_email, valid_number_phone
 from config import *
 
 
@@ -96,6 +96,10 @@ class ContactAddress:
                 sleep(1)
                 break
 
+            status: bool = valid_name(new_name)
+            if status:
+                continue
+
             self.name = new_name
             break
 
@@ -114,6 +118,10 @@ class ContactAddress:
                 print("Вы ввели слишком длинную фамилию. Изменения не засчитаны...")
                 sleep(1)
                 break
+
+            status: bool = valid_surname(new_surname)
+            if status:
+                continue
 
             self.surname = new_surname
             break
@@ -134,6 +142,10 @@ class ContactAddress:
                 sleep(1)
                 break
 
+            status: bool = valid_number_phone(new_number_phone)
+            if status:
+                continue
+
             self.number_phone = new_number_phone
             break
 
@@ -152,6 +164,10 @@ class ContactAddress:
                 print("Вы ввели слишком длинную почту. Изменения не засчитаны...")
                 sleep(1)
                 break
+
+            status: bool = valid_email(new_email)
+            if status:
+                continue
 
             self.email = new_email
             break
