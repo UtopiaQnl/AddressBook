@@ -18,11 +18,14 @@ This console version of the address book is capable of storing, issuing, searchi
 Clone the repository and run the file ***main.py***.
 Make sure that all [requirements](#requirements) are met.
 
+
 ## Requirements
 
 _The Python interpreter version 3.10+_
 
 All python dependencies specified in the file [requirements.txt](/requirements.txt)
+
+    pip install -r requirements.txt
 
 ## Developers
 
