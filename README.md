@@ -22,6 +22,8 @@ Make sure that all [requirements](#requirements) are met.
 
 _The Python interpreter version 3.10+_
 
+All python dependencies specified in the file [requirements.txt](/requirements.txt)
+
 ## Developers
 
 - [Qu1nel](https://github.com/Qu1nel)
