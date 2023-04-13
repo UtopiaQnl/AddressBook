@@ -15,45 +15,43 @@ Python3.10+
 __author__ = 'Qu1nel'
 __version__ = 1.0
 
+
 import os
-import pickle
+from pathlib import Path
+from typing import NoReturn, Type
 
-from command_handler import MainCommandHandler
-from contact_address import ContactAddress
-from book import Book
+import dill
 
-from tools import exit_from_program, create_file
+from core.Controller import Controller
+
+from .supportive.State import State
+from core import Core
+from db.book_table import BookTable
+
 from config import *
 
 
-def read_address_book_from_file() -> Book:
-    """Читает базу данных контактов из файла если та существует, иначе создает новую.
+def read_address_book_from_local_file(path_to_database: Path | str) -> BookTable:
+    """Читает базу данных контактов из файла если та существует, иначе создает новую."""
 
-    :return: Book
-    """
-    if os.path.exists(SAVE_FILE_NAME):
-        if os.path.getsize(SAVE_FILE_NAME) == 0:
-            book: Book = Book()
-        else:
-            with open(SAVE_FILE_NAME, 'rb') as file_address_book:
-                book: Book = Book(pickle.load(file_address_book))
+    if (isinstance(path_to_database, Path) and path_to_database.exists()) or \
+            os.path.exists(path_to_database):
+        with open(path_to_database, mode='rb') as file_database:
+            _book = dill.load(file_database)
     else:
-        book: Book = Book()
-        if create_file(SAVE_FILE_NAME) is False:
-            print("ОШИБКА! НЕ УДАЛОСЬ СОЗДАТЬ БАЗУ ДАННЫХ КОНТАКТОВ...")
-            exit_from_program()
+        _book: BookTable = BookTable()
 
-    return book
+    return _book
 
 
-def main() -> None:
-    main_book: Book = read_address_book_from_file()
+def main() -> NoReturn:
+    state_program: State = State.INIT
 
-    program: MainCommandHandler = MainCommandHandler(address_book=main_book)
-    try:
-        program.run()
-    except KeyboardInterrupt:
-        exit_from_program()
+    db: BookTable = read_address_book_from_local_file(SAVE_DB_PATH)
+    while True:
+        controller = Core.get_controller_by_state(state_program)
+        controller_entity = controller(state=state_program, data=db)
+        state_program = controller_entity.run()
 
 
 if __name__ == '__main__':
