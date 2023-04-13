@@ -1,15 +1,18 @@
 from typing import Type
 
-from ..controllers.MenuController import MenuController
+from core.Controller import Controller
 
-from Controller import Controller
-from ..supportive.State import State
+from controllers.MenuController import MenuController
+from controllers.ExitController import ExitController
+
+from supportive.State import State
 
 
 DefaultController = MenuController
 
 CONTROLLERS = {
     State.INIT: DefaultController,
+    State.EXIT: ExitController,
 }
 
 
