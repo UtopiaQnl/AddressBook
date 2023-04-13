@@ -1,10 +1,10 @@
 from typing import Type
 
-from ..supportive.State import State
-
 from ..controllers.MenuController import MenuController
 
 from Controller import Controller
+from ..supportive.State import State
+
 
 DefaultController = MenuController
 
