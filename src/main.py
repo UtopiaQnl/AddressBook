@@ -14,13 +14,12 @@ import os
 from pathlib import Path
 from typing import NoReturn, Type
 
-import dill
+import dill  # type: ignore
 
-from core import Core
+from core.Core import get_controller_by_state
 from core.Controller import Controller
-
 from supportive.State import State
-from db.book_table import BookTable
+from db.BookTable import BookTable
 
 from config import *
 
@@ -34,7 +33,7 @@ def read_address_book_from_local_file(path_to_database: Path | str) -> BookTable
         with open(path_to_database, mode='rb') as file_database:
             book = dill.load(file_database)
     else:
-        book: BookTable = BookTable()
+        book = BookTable()
 
     return book
 
@@ -44,7 +43,7 @@ def main() -> NoReturn:
 
     db: BookTable = read_address_book_from_local_file(SAVE_DB_PATH)
     while True:
-        controller: Type[Controller] = Core.get_controller_by_state(state_program)
+        controller: Type[Controller] = get_controller_by_state(state_program)
         controller_entity = controller(state=state_program, data=db)
         state_program = controller_entity.run()
 
