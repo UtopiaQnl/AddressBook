@@ -5,9 +5,9 @@ from views import render_template
 
 
 def is_valid_user_request(request: str) -> bool:
-    """Предикат. Проверяет пользовательский ввод на валидность.
+    """Предикат. Проверяет пользовательский ввод в меню на валидность.
 
-    Если строка является 'a', 's', 'r', 'ed', 'sr', 'e' или
+    Если строка является 'a', 's', 'r', 'ed', 'sr', 'e', 'exit' или
     '-1', '0', '1', '2', '3', '4', '5' то валидация пройдет успешно.
 
     Args:
@@ -19,9 +19,18 @@ def is_valid_user_request(request: str) -> bool:
     if not request:
         return False
 
-    request = request[1:] if request.startswith('-') else request
+    request = request.strip('-')
 
-    return len(request) == 1 and request.isdigit()
+    valid_str_value = (
+        'e', 'ex', 'exit',
+    )
+
+    if request.isdigit() and len(request) == 1:
+        return True
+    elif request.isalpha() and request in valid_str_value:
+        return True
+
+    return False
 
 
 def get_new_state_from_request(request: str) -> State:
@@ -34,10 +43,11 @@ def get_new_state_from_request(request: str) -> State:
     Returns:
         State - Новое состояние, иначе состояние по-умолчанию (State.INIT)
     """
-    code = int(request)
+
+    code = int(request) if request.isdigit() else request
 
     match code:
-        case -1 | 0:
+        case -1 | 0 | 'e' | 'exit' | 'ex':
             output_state = State.EXIT
         case 1:
             output_state = State.ADD
