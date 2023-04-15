@@ -62,6 +62,11 @@ class TestMenuControllers(unittest.TestCase):
         self.assertEqual(is_valid_user_request('e'), True)
         self.assertEqual(is_valid_user_request('exit'), True)
 
+    def test_valid_user_request_str_show(self):
+        self.assertEqual(is_valid_user_request('show'), True)
+        self.assertEqual(is_valid_user_request('s'), True)
+        self.assertEqual(is_valid_user_request('sh'), True)
+
     def test_no_valid_user_request_str(self):
         self.assertEqual(is_valid_user_request('exxit'), False)
         self.assertEqual(is_valid_user_request('eit'), False)
@@ -69,6 +74,11 @@ class TestMenuControllers(unittest.TestCase):
         self.assertEqual(is_valid_user_request('exxitt'), False)
         self.assertEqual(is_valid_user_request('exiit'), False)
         self.assertEqual(is_valid_user_request('ext'), False)
+        self.assertEqual(is_valid_user_request('shows'), False)
+        self.assertEqual(is_valid_user_request('sho'), False)
+        self.assertEqual(is_valid_user_request('sow'), False)
+        self.assertEqual(is_valid_user_request('how'), False)
+        self.assertEqual(is_valid_user_request('shos'), False)
 
 
 class TestMenuControllers2(unittest.TestCase):

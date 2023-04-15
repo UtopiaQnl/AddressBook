@@ -1,14 +1,13 @@
-from supportive.State import State
 from core.Controller import Controller
-
+from supportive.State import State
 from views import render_template
 
 
 def is_valid_user_request(request: str) -> bool:
     """Предикат. Проверяет пользовательский ввод в меню на валидность.
 
-    Если строка является 'a', 's', 'r', 'ed', 'sr', 'e', 'exit' или
-    '-1', '0', '1', '2', '3', '4', '5' то валидация пройдет успешно.
+    Если строка является '0', '1', '2' или 'next', 'previous', 'exit'
+    то валидация пройдет успешно.
 
     Args:
         request - Введенная строка от пользователя.
@@ -16,14 +15,12 @@ def is_valid_user_request(request: str) -> bool:
     Returns:
         Булевый тип.
     """
-    if not request:
+    if not request or request.startswith('-'):
         return False
 
-    request = request.strip('-')
-
     valid_str_value = (
-        'e', 'ex', 'exit',
-        's', 'sh', 'show'
+        'n', 'ne', 'nex', 'next',
+        'p', 'pr', 'pre', 'prev', 'previous'
     )
 
     if request.isdigit() and len(request) == 1:
@@ -38,31 +35,22 @@ def get_new_state_from_request(request: str) -> State:
     """Получает состояние программы в зависимости от запроса от пользователя.
 
     Args:
-        request - Проверенная строка (т.е является корректной: 1 0 -1 2 3 ...)
+        request - Проверенная строка (т.е является корректной: 0 1 2 next ...)
         введённая пользователем.
 
     Returns:
-        State - Новое состояние, иначе состояние по-умолчанию (State.INIT)
+        State - Новое состояние
     """
 
-    code = int(request) if request.isdigit() else request
+    # TODO: добавить состояния продолжить (т.е. остаться в этом же контролере) и уже в нем делать изменения, которые
+    # TODO: пойдут на отрисовку в view?
 
-    match code:
-        case 0 | 'e' | 'exit' | 'ex':
-            output_state = State.EXIT
-        case 1:
-            output_state = State.ADD
-        case 2 | 's' | 'sh' | 'show':
-            output_state = State.SHOW
-        case _:
-            output_state = State.INIT
-
-    return output_state
+    return State.INIT
 
 
-class MenuController(Controller):
+class ShowController(Controller):
     def run(self) -> State:
-        render_template(template_name="menu.tmplt")
+        render_template(template_name='show.tmplt', context=dict())
 
         user_request = input("$> ").lower().strip()
 
