@@ -31,6 +31,6 @@ All python dependencies specified in the file [requirements.txt](/requirements.t
 
 - [Qu1nel](https://github.com/Qu1nel)
 
-## License
-
-Project Qu1nel.AddressBook-python is distributed under the [MIT license](LICENSE).
+License
+---
+This Qu1nel.AddressBook-python in distributive under the __[MIT License](./LICENSE)__, and it also uses those codes that are distributed under the __[MIT License](./LICENSE)__.
